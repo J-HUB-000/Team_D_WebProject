@@ -23,5 +23,8 @@ public class UserService {
 		//SELECT * FROM site_user; 와 같은 의미
 		return userRepository.findAll();
 	}
+	public User login(String email, String passwd) {
+        return userRepository.findByEmailAndPasswd(email, passwd);
+    }
 }
 
