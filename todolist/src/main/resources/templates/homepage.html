@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .my-btn {
+            padding: 16px 32px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .my-btn:hover {
+            background-color: #357a38;
+        }
+    </style>
+</head>
+<body>
+    <h1>메인 페이지 </h1>
+    <div class="button-group">
+        <button class="my-btn" onclick="location.href='/todo/signup'">로그인</button>
+        <button class="my-btn" onclick="location.href='/my-schedule'">내 일정</button>
+        <button class="my-btn" onclick="location.href='/shared-schedule'">공유 일정</button>
+        <button class="my-btn" onclick="location.href='/social'">소셜</button>
+    </div>
+</body>
+</html>

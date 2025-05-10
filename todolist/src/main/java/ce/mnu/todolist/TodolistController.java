@@ -14,6 +14,10 @@ import ce.mnu.todolist.service.UserService;
 public class TodolistController {
 	@Autowired
 	private UserService userService;
+	@GetMapping("/homepage")
+	public String homepage() {
+		return "homepage";
+	}
 	@GetMapping("/signup")
 	public String signup() {
 		return "signup_input";
