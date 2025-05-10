@@ -56,13 +56,37 @@ public class TodolistController {
             return "login";
         }
     }
+ // 비밀번호 찾기 폼
+    @GetMapping("/findpasswd")
+    public String findPasswdForm() {
+        return "findpasswd";
+    }
+
+    // 비밀번호 찾기 처리
+    @PostMapping("/findpasswd")
+    public String findPasswd(String email, Model model) {
+        User user = userService.findByEmail(email);
+        if (user != null) {
+            model.addAttribute("passwd", user.getPasswd());
+        } else {
+            model.addAttribute("error", "해당 이메일로 등록된 사용자가 없습니다.");
+        }
+        return "findpasswd";
+    }
+
 	@GetMapping("/signup")
 	public String signup() {
 		return "signup_input";
 	}
 	@PostMapping("/signup")
-	public String signup(SignupDTO user) {
-		userService.save(user);
-		return "signup_done";
+	public String signup(SignupDTO user, Model model) {
+	    if (userService.isEmailExists(user.getEmail())) {
+	        model.addAttribute("error", "이미 등록된 이메일입니다.");
+	        return "signup_input";
+	    }
+	    userService.save(user);
+	    model.addAttribute("signupDTO", user); // 가입 완료 페이지에서 이름 출력하려면 필요
+	    return "signup_done";
 	}
+
 }

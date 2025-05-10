@@ -18,7 +18,9 @@ public class UserService {
 				dto.getNickname(), dto.getPhone());
 		userRepository.save(user);
 	}
-	
+	public boolean isEmailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
 	public Iterable<User> getAll() {
 		//SELECT * FROM site_user; 와 같은 의미
 		return userRepository.findAll();
@@ -26,5 +28,9 @@ public class UserService {
 	public User login(String email, String passwd) {
         return userRepository.findByEmailAndPasswd(email, passwd);
     }
+	public User findByEmail(String email) {
+	    return userRepository.findByEmail(email);
+	}
+
 }
 

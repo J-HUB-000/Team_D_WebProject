@@ -1,11 +1,9 @@
 package ce.mnu.todolist.repository;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,22 +11,21 @@ import lombok.NoArgsConstructor;
 @Table(name = "site_user")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class User {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	private String nickname;
-	private String phone;
-	private String email;
-	private String name;
-	private String passwd;
-	public User(String name, String email, 
-			String passwd, String nickname, String phone) {
-		this.name=name;
-		this.email=email;
-		this.passwd=passwd;
-		this.nickname=nickname;
-		this.phone=phone;
-	}
+    @Id
+    @Column(length = 100) // 이메일 길이에 맞게 조정
+    private String email;
+
+    private String name;
+    private String passwd;
+    private String nickname;
+    private String phone;
+
+    public User(String name, String email, String passwd, String nickname, String phone) {
+        this.name = name;
+        this.email = email;
+        this.passwd = passwd;
+        this.nickname = nickname;
+        this.phone = phone;
+    }
 }
