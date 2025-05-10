@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 정보</title>
+</head>
+<body>
+    <h2>내 정보</h2>
+    <table border="1" style="margin: auto;">
+        <tr><th>이름</th><td th:text="${user.name}"></td></tr>
+        <tr><th>이메일</th><td th:text="${user.email}"></td></tr>
+        <tr><th>닉네임</th><td th:text="${user.nickname}"></td></tr>
+        <tr><th>전화번호</th><td th:text="${user.phone}"></td></tr>
+    </table>
+    <br>
+    <button onclick="location.href='/todo/homepage'">메인으로</button>
+</body>
+</html>

@@ -26,6 +26,22 @@ public class TodolistController {
     public String login() {
         return "login";
     }
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+	    session.invalidate(); // 세션 전체 삭제 (로그아웃)
+	    return "redirect:/todo/homepage"; // 메인 페이지로 이동
+	}
+
+	@GetMapping("/userinfo")
+	public String userInfo(HttpSession session, Model model) {
+	    User user = (User) session.getAttribute("loginUser");
+	    if (user == null) {
+	        return "redirect:/todo/login";
+	    }
+	    model.addAttribute("user", user);
+	    return "userinfo";
+	}
+
 
     @PostMapping("/login")
     public String login(String email, String passwd, Model model, HttpSession session) {
