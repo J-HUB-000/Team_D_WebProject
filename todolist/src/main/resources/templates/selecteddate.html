@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>선택된 날짜의 일정</title>
+</head>
+<body>
+<!-- 날짜를 선택한 경우 -->
+<p th:text="${selectedDate}"></p>
+
+<div th:if="${#lists.isEmpty(todos)}">
+해당 날짜에 일정이 없습니다.
+</div>
+<ul th:if="${!#lists.isEmpty(todos)}">
+  <li th:each="todo : ${todos}" th:text="${todo.todo}"></li>
+</ul>
+</body>
+</html>

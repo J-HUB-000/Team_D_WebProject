@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>내 일정 관리</title>
+</head>
+<body>
+<h3>내 일정 관리</h3>
+<form method="get" action="/todo/selected_date" target="selectedDateFrame">
+    <input type="date" name="selectedDate">
+    <button type="submit">확인</button>
+</form>
+<iframe name="selectedDateFrame" width="600" height="400"></iframe>
+</body>
+</html>

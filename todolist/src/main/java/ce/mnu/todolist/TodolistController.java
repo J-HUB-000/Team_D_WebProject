@@ -1,5 +1,6 @@
 package ce.mnu.todolist;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ce.mnu.todolist.domain.UserDTO;
 import ce.mnu.todolist.repository.FriendRequest;
 import ce.mnu.todolist.repository.FriendUser;
+import ce.mnu.todolist.repository.MyTodo;
 import ce.mnu.todolist.repository.User;
 import ce.mnu.todolist.service.FriendRequestService;
 import ce.mnu.todolist.service.FriendUserService;
+import ce.mnu.todolist.service.MyTodoService;
 import ce.mnu.todolist.service.UserService;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +28,8 @@ import jakarta.servlet.http.HttpSession;
 public class TodolistController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private MyTodoService myTodoService;
 	@Autowired
 	private FriendRequestService friendRequestService;
 	@Autowired
@@ -95,6 +100,31 @@ public class TodolistController {
 	    userService.save(user);
 	    model.addAttribute("UserDTO", user); // 가입 완료 페이지에서 이름 출력하려면 필요
 	    return "signup_done";
+	}
+	//내 일정 관리
+	@GetMapping("/my_todo")
+	public String myTodo() {
+	return "mytodo";
+	}
+	//내 일정 처리
+	@PostMapping("/my_todo_process")
+	public String myTodoProcess() {
+	return "mytodo";
+	}
+	@GetMapping("/selected_date")
+	public String myTodoProcess(String selectedDate, HttpSession session, Model model) {
+	    User user = (User) session.getAttribute("loginUser");
+	    if (user == null) {
+	        return "redirect:/todo/error";
+	    }
+	    List<MyTodo> todos = new ArrayList<>();
+	    if (selectedDate != null && !selectedDate.isEmpty()) {
+	        Date callendardate = Date.valueOf(selectedDate);
+	        todos = myTodoService.findMyTodosByEmailAndDate(user.getEmail(), callendardate);
+	    }
+	    model.addAttribute("todos", todos);
+	    model.addAttribute("selectedDate", selectedDate); // 날짜도 같이 전달
+	    return "selecteddate";
 	}
 	// 소셜(친구 목록)
     @GetMapping("/social")
