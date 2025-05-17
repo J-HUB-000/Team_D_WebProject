@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ce.mnu.todolist.repository.FriendUser;
 import ce.mnu.todolist.repository.FriendUserRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class FriendUserService {
@@ -20,6 +21,13 @@ public class FriendUserService {
 
     public List<FriendUser> getFriends(String myname) {
         return friendUserRepository.findByMyname(myname);
+    }
+    
+    @Transactional
+    public void deleteFriend(String myname, String friendname) {
+        // 양방향 모두 삭제
+        friendUserRepository.deleteByMynameAndFriendname(myname, friendname);
+        friendUserRepository.deleteByMynameAndFriendname(friendname, myname);
     }
 }
 

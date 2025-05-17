@@ -26,11 +26,19 @@ public class FriendRequestService {
     public FriendRequest findById(Long id) {
         return friendRequestRepository.findById(id).orElse(null);
     }
-
+    //친구 요청 수락
     public void acceptRequest(Long id) {
         FriendRequest req = friendRequestRepository.findById(id).orElse(null);
         if (req != null) {
             req.setStatus("ACCEPTED");
+            friendRequestRepository.save(req);
+        }
+    }
+    //친구 요청 거절
+    public void rejectRequest(Long id) {
+        FriendRequest req = friendRequestRepository.findById(id).orElse(null);
+        if (req != null) {
+            req.setStatus("REJECTED");
             friendRequestRepository.save(req);
         }
     }

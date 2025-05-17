@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface FriendUserRepository extends CrudRepository<FriendUser, Long> {
     List<FriendUser> findByMyname(String myname);
+    public void deleteByMynameAndFriendname(String myname, String friendname);
 }

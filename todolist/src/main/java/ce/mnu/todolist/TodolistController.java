@@ -111,6 +111,15 @@ public class TodolistController {
         model.addAttribute("friends", friends);
         return "friends";
     }
+    //소셜(친구 삭제)
+    @PostMapping("/delete_friend")
+    public String deleteFriend(String friendname, HttpSession session) {
+        User me = (User) session.getAttribute("loginUser");
+        if (me == null) return "redirect:/todo/login";
+        friendUserService.deleteFriend(me.getName(), friendname);
+        return "redirect:/todo/social";
+    }
+
     // 사용자 검색
     @GetMapping("/search_user")
     public String searchUser(HttpSession session) {
@@ -150,6 +159,17 @@ public class TodolistController {
         if (req != null && req.getToUser().equals(me.getName())) {
             friendRequestService.acceptRequest(id);
             friendUserService.addFriend(req.getFromUser(), req.getToUser());
+        }
+        return "redirect:/todo/social";
+    }
+    //친구 요청 거절
+    @GetMapping("/reject_friend_request")
+    public String rejectFriendRequest(Long id, HttpSession session) {
+        User me = (User) session.getAttribute("loginUser");
+        if (me == null) return "redirect:/todo/login";
+        FriendRequest req = friendRequestService.findById(id);
+        if (req != null && req.getToUser().equals(me.getName())) {
+            friendRequestService.rejectRequest(id);
         }
         return "redirect:/todo/social";
     }
