@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>사용자 검색 결과</title>
+</head>
+<body>
+    <div th:if="${name}">
+        <p>사용자: <span th:text="${name}"></span></p>
+    </div>
+</body>
+</html>

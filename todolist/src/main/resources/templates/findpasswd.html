@@ -11,9 +11,6 @@
         <input type="email" id="email" name="email" required>
         <button type="submit">비밀번호 찾기</button>
     </form>
-    <div th:if="${passwd}">
-        <p>비밀번호: <span th:text="${passwd}"></span></p>
-    </div>
     <div th:if="${error}">
         <p style="color:red;" th:text="${error}"></p>
     </div>

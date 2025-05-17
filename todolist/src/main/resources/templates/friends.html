@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>소셜 - 친구 목록</title>
+</head>
+<body>
+<table border="1">
+<thead>
+<tr><th>친구 이름</th></tr>
+</thead>
+<tbody>
+<tr th:each="friend : ${friends}">
+    <td th:text="${friend.name}"></td>
+</tr>
+</tbody>
+</table>
+<button onclick="location.href='/todo/search_user'">사용자 검색</button>
+</body>
+</html>

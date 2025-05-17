@@ -3,7 +3,7 @@ package ce.mnu.todolist.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ce.mnu.todolist.domain.SignupDTO;
+import ce.mnu.todolist.domain.UserDTO;
 import ce.mnu.todolist.repository.User;
 import ce.mnu.todolist.repository.UserRepository;
 
@@ -12,7 +12,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	//DTO 클래스에서 가져온 데이터를 SiteUserRepository클래스에 저장.
-	public void save(SignupDTO dto) {
+	public void save(UserDTO dto) {
 		User user = new User(dto.getName(), 
 				dto.getEmail(), dto.getPasswd(),
 				dto.getNickname(), dto.getPhone());
