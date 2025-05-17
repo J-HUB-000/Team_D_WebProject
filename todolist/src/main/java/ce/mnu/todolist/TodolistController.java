@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ce.mnu.todolist.domain.UserDTO;
+import ce.mnu.todolist.repository.FriendRequest;
+import ce.mnu.todolist.repository.FriendUser;
 import ce.mnu.todolist.repository.User;
+import ce.mnu.todolist.service.FriendRequestService;
+import ce.mnu.todolist.service.FriendUserService;
 import ce.mnu.todolist.service.UserService;
 import org.springframework.ui.Model;
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +25,10 @@ import jakarta.servlet.http.HttpSession;
 public class TodolistController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private FriendRequestService friendRequestService;
+	@Autowired
+	private FriendUserService friendUserService;
 	@GetMapping("/homepage")
 	public String homepage() {
 		return "homepage";
@@ -38,7 +46,7 @@ public class TodolistController {
 	public String userInfo(HttpSession session, Model model) {
 	    User user = (User) session.getAttribute("loginUser");
 	    if (user == null) {
-	        return "redirect:/todo/login";
+	        return "redirect:/todo/homepage";
 	    }
 	    model.addAttribute("user", user);
 	    return "userinfo";
@@ -88,30 +96,61 @@ public class TodolistController {
 	    model.addAttribute("UserDTO", user); // 가입 완료 페이지에서 이름 출력하려면 필요
 	    return "signup_done";
 	}
-	//소셜(친구 목록)
-	@GetMapping("/social")
-	public String friendsList(Model model, HttpSession session) {
-	    // 예시: 로그인한 사용자의 친구 목록을 가져오는 로직(추후 DB연동)
-	    List<User> friends = new ArrayList<>();
-	    // friends.add(new User(...)); // 임시 데이터
-	    model.addAttribute("friends", friends);
-	    return "friends";
-	}
+	// 소셜(친구 목록)
+    @GetMapping("/social")
+    public String friendsList(Model model, HttpSession session) {
+        User me = (User) session.getAttribute("loginUser");
+        if (me == null) {
+            return "redirect:/todo/homepage";
+        }
+        String myname = me.getName();
+        List<FriendRequest> requests = friendRequestService.getRequestsForUser(myname);
+        model.addAttribute("requests", requests);
 
-	//사용자 검색
-	@GetMapping("/search_user")
-	public String searchUser() {
-		return "search_user";
-	}
-	//사용자 검색 처리
-	@PostMapping("/search_user")
-	public String searchUserResult(String email, Model model) {
+        List<FriendUser> friends = friendUserService.getFriends(myname);
+        model.addAttribute("friends", friends);
+        return "friends";
+    }
+    // 사용자 검색
+    @GetMapping("/search_user")
+    public String searchUser(HttpSession session) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/todo/homepage";
+        }
+        return "search_user";
+    }
+    // 사용자 검색 처리
+    @PostMapping("/search_user")
+    public String searchUserResult(String email, Model model, HttpSession session) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/todo/homepage";
+        }
         User user = userService.findByEmail(email);
         if (user != null) {
             model.addAttribute("name", user.getName());
         } else {
             model.addAttribute("error", "해당 이메일로 등록된 사용자가 없습니다.");
         }
-		return "search_user_done";
-	}
+        return "search_user_done";
+    }
+    // 친구 요청 보내기
+    @PostMapping("/send_friend_request")
+    public String sendFriendRequest(String toUser, HttpSession session) {
+        User me = (User) session.getAttribute("loginUser");
+        if (me == null) return "redirect:/todo/login";
+        friendRequestService.sendRequest(me.getName(), toUser);
+        return "redirect:/todo/social";
+    }
+    // 친구 요청 수락
+    @GetMapping("/accept_friend_request")
+    public String acceptFriendRequest(Long id, HttpSession session) {
+        User me = (User) session.getAttribute("loginUser");
+        if (me == null) return "redirect:/todo/login";
+        FriendRequest req = friendRequestService.findById(id);
+        if (req != null && req.getToUser().equals(me.getName())) {
+            friendRequestService.acceptRequest(id);
+            friendUserService.addFriend(req.getFromUser(), req.getToUser());
+        }
+        return "redirect:/todo/social";
+    }
 }

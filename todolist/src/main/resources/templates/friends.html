@@ -5,13 +5,24 @@
 <title>소셜 - 친구 목록</title>
 </head>
 <body>
+<h3>받은 친구 요청</h3>
+<div th:if="${requests}">
+    <ul>
+        <li th:each="req : ${requests}">
+            <a th:href="@{/todo/accept_friend_request(id=${req.id})}">
+                [[${req.fromUser}]] 님의 새로운 친구 요청
+            </a>
+        </li>
+    </ul>
+</div>
+<h3>내 친구 목록</h3>
 <table border="1">
 <thead>
 <tr><th>친구 이름</th></tr>
 </thead>
 <tbody>
 <tr th:each="friend : ${friends}">
-    <td th:text="${friend.name}"></td>
+    <td th:text="${friend.friendname}"></td>
 </tr>
 </tbody>
 </table>

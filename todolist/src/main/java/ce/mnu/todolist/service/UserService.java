@@ -1,9 +1,13 @@
 package ce.mnu.todolist.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ce.mnu.todolist.domain.UserDTO;
+import ce.mnu.todolist.repository.FriendRequest;
+import ce.mnu.todolist.repository.FriendUser;
 import ce.mnu.todolist.repository.User;
 import ce.mnu.todolist.repository.UserRepository;
 
@@ -31,6 +35,5 @@ public class UserService {
 	public User findByEmail(String email) {
 	    return userRepository.findByEmail(email);
 	}
-
 }
 
