@@ -27,7 +27,7 @@
 
         <!-- 공유 일정 버튼 -->
         <button th:if="${session.loginUser != null}"
-            onclick="location.href='/todo/shared_todo'">공유 일정</button>
+            onclick="location.href='/todo/share_todo'">공유 일정</button>
         <button th:if="${session.loginUser == null}"
             onclick="requireLogin()">공유 일정</button>
 

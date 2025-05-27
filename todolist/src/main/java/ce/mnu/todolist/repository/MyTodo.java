@@ -1,7 +1,6 @@
 package ce.mnu.todolist.repository;
 
 
-import java.sql.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +21,6 @@ public class MyTodo {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String email;
-    private Date callendardate;
+    private String callendardate;
     private String todo;
 }

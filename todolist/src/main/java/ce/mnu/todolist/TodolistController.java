@@ -1,6 +1,5 @@
 package ce.mnu.todolist;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +105,7 @@ public class TodolistController {
 	public String myTodo() {
 	return "mytodo";
 	}
-	//내 일정 처리
+	//내 일정 조회
 	@PostMapping("/my_todo_process")
 	public String myTodoProcess() {
 	return "mytodo";
@@ -119,13 +118,62 @@ public class TodolistController {
 	    }
 	    List<MyTodo> todos = new ArrayList<>();
 	    if (selectedDate != null && !selectedDate.isEmpty()) {
-	        Date callendardate = Date.valueOf(selectedDate);
-	        todos = myTodoService.findMyTodosByEmailAndDate(user.getEmail(), callendardate);
+	        todos = myTodoService.findMyTodosByEmailAndDate(user.getEmail(), selectedDate);
 	    }
 	    model.addAttribute("todos", todos);
 	    model.addAttribute("selectedDate", selectedDate); // 날짜도 같이 전달
 	    return "selecteddate";
 	}
+	//일정 등록
+	@PostMapping("/add_todo")
+	public String addTodo(String selectedDate, String todo, HttpSession session, Model model) {
+	    User user = (User) session.getAttribute("loginUser");
+	    if (user == null) {
+	        return "redirect:/todo/login";
+	    }
+	    String email = user.getEmail();;
+	    myTodoService.addTodo(email, selectedDate, todo);
+
+	    return "redirect:/todo/selected_date?selectedDate=" + selectedDate;
+	}
+	//일정 삭제
+	@PostMapping("/delete_todo")
+	public String deleteTodo(Long id, String selectedDate, HttpSession session) {
+	    User user = (User) session.getAttribute("loginUser");
+	    if (user == null) {
+	        return "redirect:/todo/login";
+	    }
+	    myTodoService.deleteTodo(id);
+	    // 삭제 후 해당 날짜 일정 페이지로 리다이렉트
+	    return "redirect:/todo/selected_date?selectedDate=" + selectedDate;
+	}
+	
+	//일정 수정
+	@GetMapping("/edit_todo_form")
+	public String editTodoForm(Long id, String selectedDate, HttpSession session, Model model) {
+	    User user = (User) session.getAttribute("loginUser");
+	    if (user == null) return "redirect:/todo/login";
+	    List<MyTodo> todos = myTodoService.findMyTodosByEmailAndDate(user.getEmail(), selectedDate);
+	    model.addAttribute("todos", todos);
+	    model.addAttribute("selectedDate", selectedDate);
+	    model.addAttribute("editId", id); // 수정 중인 일정 id
+	    return "selecteddate";
+	}
+	@PostMapping("/edit_todo")
+	public String editTodo(Long id, String todo, String selectedDate, HttpSession session) {
+	    User user = (User) session.getAttribute("loginUser");
+	    if (user == null) return "redirect:/todo/login";
+	    myTodoService.updateTodo(id, todo);
+	    return "redirect:/todo/selected_date?selectedDate=" + selectedDate;
+	}
+
+	//공유 일정 관리
+	@GetMapping("/share_todo")
+	public String shareTodo() {
+	return "sharetodo";
+	}	
+
+
 	// 소셜(친구 목록)
     @GetMapping("/social")
     public String friendsList(Model model, HttpSession session) {

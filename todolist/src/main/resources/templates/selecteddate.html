@@ -5,14 +5,55 @@
 <title>선택된 날짜의 일정</title>
 </head>
 <body>
-<!-- 날짜를 선택한 경우 -->
 <p th:text="${selectedDate}"></p>
 
 <div th:if="${#lists.isEmpty(todos)}">
 해당 날짜에 일정이 없습니다.
 </div>
-<ul th:if="${!#lists.isEmpty(todos)}">
-  <li th:each="todo : ${todos}" th:text="${todo.todo}"></li>
-</ul>
+<table border="1">
+  <thead>
+    <tr>
+      <th>일정 내용</th>
+      <th>수정</th>
+      <th>삭제</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="todo : ${todos}">
+      <td>
+        <!-- 수정 중인 일정이면 입력 폼, 아니면 텍스트만 -->
+        <span th:if="${editId} != ${todo.id}" th:text="${todo.todo}"></span>
+        <form th:if="${editId} == ${todo.id}" th:action="@{/todo/edit_todo}" method="post" style="display:inline;">
+          <input type="hidden" name="id" th:value="${todo.id}" />
+          <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
+          <input type="text" name="todo" th:value="${todo.todo}" required/>
+          <button type="submit">확인</button>
+        </form>
+      </td>
+      <td>
+        <!-- 수정 중이 아닐 때만 수정 버튼 표시 -->
+        <form th:if="${editId} != ${todo.id}" th:action="@{/todo/edit_todo_form}" method="get" style="display:inline;">
+          <input type="hidden" name="id" th:value="${todo.id}" />
+          <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
+          <button type="submit">수정</button>
+        </form>
+      </td>
+      <td>
+        <form th:action="@{/todo/delete_todo}" method="post" style="display:inline;">
+          <input type="hidden" name="id" th:value="${todo.id}" />
+          <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
+          <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+        </form>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- 일정 추가 폼 -->
+<form action="/todo/add_todo" method="post">
+  <input type="hidden" name="selectedDate" th:value="${selectedDate}"/>
+  <input type="text" name="todo" placeholder="일정을 입력하세요" required/>
+  <button type="submit">등록</button>
+</form>
 </body>
 </html>
