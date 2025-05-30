@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import ce.mnu.todolist.domain.RoomDTO;
 import ce.mnu.todolist.domain.UserDTO;
 import ce.mnu.todolist.repository.FriendRequest;
 import ce.mnu.todolist.repository.FriendUser;
 import ce.mnu.todolist.repository.MyTodo;
+import ce.mnu.todolist.repository.ShareRoom;
 import ce.mnu.todolist.repository.User;
 import ce.mnu.todolist.service.FriendRequestService;
 import ce.mnu.todolist.service.FriendUserService;
@@ -114,7 +116,7 @@ public class TodolistController {
 	public String myTodoProcess(String selectedDate, HttpSession session, Model model) {
 	    User user = (User) session.getAttribute("loginUser");
 	    if (user == null) {
-	        return "redirect:/todo/error";
+	        return "redirect:/todo/login";
 	    }
 	    List<MyTodo> todos = new ArrayList<>();
 	    if (selectedDate != null && !selectedDate.isEmpty()) {
@@ -167,12 +169,40 @@ public class TodolistController {
 	    return "redirect:/todo/selected_date?selectedDate=" + selectedDate;
 	}
 
-	//공유 일정 관리
-	@GetMapping("/share_todo")
-	public String shareTodo() {
-	return "sharetodo";
+	//공유 방목록
+	@GetMapping("/share_room")
+	public String sharRoom(Model model) {
+		Iterable<ShareRoom> rooms = userService.getRoomAll();
+		model.addAttribute("rooms",rooms);
+	return "share_roomlist";
 	}	
-
+	//공유 일정 방 만들기
+    @GetMapping("create_room")
+    public String CreateRoomForm(HttpSession session) {
+    	User user = (User) session.getAttribute("loginUser");
+    	if (user == null) {
+    	    return "redirect:/todo/login"; // 로그인 되지 않았으면 로그인 페이지로 리다이렉트
+    	}
+    	return "createroom";
+    }
+    @PostMapping("create_room")
+    public String CreateRoom(RoomDTO room, HttpSession session, Model model) {
+    	User user = (User) session.getAttribute("loginUser");
+    	String email = user.getEmail();
+    	// 중복 체크
+        if (userService.isRoomNameExists(room.getRoomname())) {
+            model.addAttribute("error", "중복되는 방이름입니다.");
+            return "createroom";
+        }
+    	userService.save(room, email);//DB에 저장
+    	return "redirect:/todo/share_room";
+    }
+    
+    //공유 일정 조회
+    @GetMapping("/share_todo")
+    public String ShareTodo(String roomname){
+    	return "sharetodo";
+    }
 
 	// 소셜(친구 목록)
     @GetMapping("/social")
@@ -251,4 +281,5 @@ public class TodolistController {
         }
         return "redirect:/todo/social";
     }
+    
 }
