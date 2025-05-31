@@ -6,12 +6,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import ce.mnu.siteuser.repository.SiteFile;
 import ce.mnu.todolist.domain.RoomDTO;
 import ce.mnu.todolist.domain.UserDTO;
 import ce.mnu.todolist.repository.ShareRoom;
 import ce.mnu.todolist.repository.ShareRoomRepository;
+import ce.mnu.todolist.repository.ShareTodoRepository;
 import ce.mnu.todolist.repository.User;
 import ce.mnu.todolist.repository.UserRepository;
 
@@ -21,6 +22,9 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private ShareRoomRepository shareRoomRepository;
+	@Autowired
+	private ShareTodoRepository shareTodoRepository;
+	
 	//DTO 클래스에서 가져온 데이터를 SiteUserRepository클래스에 저장.
 	public void save(UserDTO dto) {
 		User user = new User(dto.getName(), 
@@ -56,6 +60,16 @@ public class UserService {
 	}
 	public boolean isRoomNameExists(String roomname) {
 	    return shareRoomRepository.existsByRoomname(roomname);
+	}
+	//공유방 삭제
+	@Transactional
+	public void deleteRoomAndShareTodos(Long roomid) {
+		shareTodoRepository.deleteByRoomid(roomid); // 일정 삭제
+	    shareRoomRepository.deleteById(roomid);     // 방 삭제
+	}
+	//공유방 생성한 호스트 이메일 찾기
+	public List<ShareRoom> getRoomsByOwnerEmail(String email) {
+	    return shareRoomRepository.findByEmail(email);
 	}
 
 }

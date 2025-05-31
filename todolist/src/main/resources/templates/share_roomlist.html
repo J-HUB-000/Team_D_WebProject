@@ -6,13 +6,18 @@
 </head>
 <body>
 <table border ='1'>
-<tr><th>호스트</th><th>방이름</th><th>설명</th></tr>
+<tr><th>id</th><th>호스트</th><th>방이름</th><th>설명</th></tr>
 <tr th:each="room : ${rooms}">
+ <td th:text="${room.roomid}"></td>
   <td th:text="${room.email}"></td>
   <td th:text="${room.roomname}"></td>
   <td th:text="${room.roomexp}"></td>
-  <td>
-<button type="button" th:onclick="|location.href='@{/todo/share_todo(roomname=${room.roomname})}'|">입장하기</button>
+  <td th:if="${room.email} == ${loginUserEmail}">
+	  <form th:action="@{/todo/delete_room}" method="post" style="display:inline;">
+	      <input type="hidden" name="roomid" th:value="${room.roomid}" />
+	      <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">방 삭제</button>
+	  </form>
+<button type="button" th:onclick="|location.href='@{/todo/share_todo(roomid=${room.roomid})}'|">입장하기</button>
 
 </td>
 </tr>

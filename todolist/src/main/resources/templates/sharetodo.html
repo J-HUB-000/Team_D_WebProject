@@ -2,8 +2,129 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>공유 일정</title>
+<title>공유 일정 관리(캘린더)</title>
+
+<style>
+    .calendar { width: 350px; margin: 30px auto; }
+    .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .calendar-header button { background: #eee; border: none; padding: 4px 10px; cursor: pointer; }
+    .calendar-table { width: 100%; border-collapse: collapse; }
+    .calendar-table th, .calendar-table td { width: 14%; height: 40px; text-align: center; border: 1px solid #ddd; }
+    .calendar-table th { background: #f4f4f4; }
+    .calendar-table td button { width: 100%; height: 100%; border: none; background: none; cursor: pointer; }
+    .calendar-table td.today { background: #ffe0b2; }
+    .calendar-table td.selected button {background: #90caf9;color: #fff;border: none;}
+  </style>
+
 </head>
 <body>
+<h3>공유 일정 관리</h3>
+<form id="dateForm" method="get" action="/todo/selected_date_share" style="display:none;">
+  <input type="date" id="selectedDate" name="selectedDate" />
+</form>
+<div class="calendar">
+    <div class="calendar-header">
+      <button id="prev">&lt;</button>
+      <span class="year-month"></span>
+      <button id="next">&gt;</button>
+    </div>
+    <table class="calendar-table">
+      <thead>
+        <tr>
+          <th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
+        </tr>
+      </thead>
+      <tbody id="calendar-body">
+        <!-- 날짜가 여기에 동적으로 들어감 -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // 오늘 날짜 정보
+    let today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth(); // 0~11
+    let selectedDateStr = null; // 선택된 날짜를 저장
+    
+    function createCalendar(year, month) {
+      const yearMonth = document.querySelector('.year-month');
+      yearMonth.textContent = year + '년 ' + (month + 1) + '월';
+
+      const calendarBody = document.getElementById('calendar-body');
+      calendarBody.innerHTML = '';
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const lastDate = new Date(year, month + 1, 0).getDate();
+
+      let row = document.createElement('tr');
+      // 빈칸 채우기
+      for (let i = 0; i < firstDay; i++) {
+        row.appendChild(document.createElement('td'));
+      }
+
+      for (let date = 1; date <= lastDate; date++) {
+        if ((firstDay + date - 1) % 7 === 0 && date !== 1) {
+          calendarBody.appendChild(row);
+          row = document.createElement('tr');
+        }
+        const cell = document.createElement('td');
+        const btn = document.createElement('button');
+        btn.textContent = date;
+        // yyyy-MM-dd 형식 만들기
+        const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(date).padStart(2, '0');
+        btn.onclick = function() {
+        	  selectDate(dateStr); // 페이지 전체 이동이 아니라 iframe만 갱신!
+        	};
+
+        // 오늘 날짜 강조
+        if (year === today.getFullYear() && month === today.getMonth() && date === today.getDate()) {
+          cell.className = 'today';
+        }
+     // 선택된 날짜 강조
+        if (selectedDateStr === dateStr) {
+          cell.classList.add('selected');
+        }
+        cell.appendChild(btn);
+        row.appendChild(cell);
+      }
+      // 남은 칸 채우기
+      while (row.children.length < 7) {
+        row.appendChild(document.createElement('td'));
+      }
+      calendarBody.appendChild(row);
+    }
+    function selectDate(dateStr) {
+    	  selectedDateStr = dateStr; // 선택된 날짜 저장
+    	  createCalendar(currentYear, currentMonth); // 캘린더 다시 그리기 (색상 반영)
+    	  // iframe의 src만 변경해서 해당 날짜의 일정 페이지를 로드
+    	  document.getElementsByName('selectedDateFrame')[0].src = '/todo/selected_date_share?selectedDate=' + dateStr;
+    	}
+
+    // 이전 달로 이동
+    document.getElementById('prev').onclick = function() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      createCalendar(currentYear, currentMonth);
+    };
+    // 다음 달로 이동
+    document.getElementById('next').onclick = function() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      createCalendar(currentYear, currentMonth);
+    };
+
+    // 최초 렌더링
+    createCalendar(currentYear, currentMonth);
+  </script>
+
+<iframe name="selectedDateFrame" width="600" height="400"></iframe>
+<button onclick="location.href='/todo/homepage'">메인으로</button>
 </body>
 </html>

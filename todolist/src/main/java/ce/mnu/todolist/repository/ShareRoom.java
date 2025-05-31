@@ -18,9 +18,8 @@ import lombok.NoArgsConstructor;
 public class ShareRoom {
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long id;
+    private Long roomid;
     private String email;
-    @Column(name = "roomname", unique = true)
     private String roomname;
     private String roomexp;
 }
