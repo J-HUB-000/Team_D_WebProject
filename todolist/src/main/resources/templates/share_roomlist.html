@@ -17,7 +17,7 @@
 	      <input type="hidden" name="roomid" th:value="${room.roomid}" />
 	      <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">방 삭제</button>
 	  </form>
-<button type="button" th:onclick="|location.href='@{/todo/share_todo(roomid=${room.roomid})}'|">입장하기</button>
+<button type="submit" th:onclick="|location.href='@{/todo/share_todo(roomid=${room.roomid})}'|">입장하기</button>
 
 </td>
 </tr>

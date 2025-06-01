@@ -10,20 +10,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ce.mnu.todolist.domain.RoomDTO;
 import ce.mnu.todolist.domain.UserDTO;
-import ce.mnu.todolist.repository.ShareRoom;
-import ce.mnu.todolist.repository.ShareRoomRepository;
-import ce.mnu.todolist.repository.ShareTodoRepository;
-import ce.mnu.todolist.repository.User;
-import ce.mnu.todolist.repository.UserRepository;
+import ce.mnu.todolist.repository.*;
 
 @Service
 public class UserService {
+
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private ShareRoomRepository shareRoomRepository;
 	@Autowired
 	private ShareTodoRepository shareTodoRepository;
+	@Autowired
+	private ShareFriendsRepository shareFriednsRepository;
+
 	
 	//DTO 클래스에서 가져온 데이터를 SiteUserRepository클래스에 저장.
 	public void save(UserDTO dto) {
@@ -71,6 +71,12 @@ public class UserService {
 	public List<ShareRoom> getRoomsByOwnerEmail(String email) {
 	    return shareRoomRepository.findByEmail(email);
 	}
-
+	// 공유일정 친구 공유(초대)
+	public void save(Long roomid, String name) {
+		ShareFriends shareFriends = new ShareFriends();
+		shareFriends.setRoomid(roomid);
+		shareFriends.setName(name);
+		shareFriednsRepository.save(shareFriends);
+	}
 }
 

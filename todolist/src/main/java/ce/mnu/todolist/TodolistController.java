@@ -16,6 +16,7 @@ import ce.mnu.todolist.domain.UserDTO;
 import ce.mnu.todolist.repository.FriendRequest;
 import ce.mnu.todolist.repository.FriendUser;
 import ce.mnu.todolist.repository.MyTodo;
+import ce.mnu.todolist.repository.ShareFriends;
 import ce.mnu.todolist.repository.ShareRoom;
 import ce.mnu.todolist.repository.ShareRoomRepository;
 import ce.mnu.todolist.repository.ShareTodo;
@@ -45,7 +46,26 @@ public class TodolistController {
 	private FriendUserService friendUserService;
 	@Autowired
 	private ShareRoomRepository shareRoomRepository;
-
+	
+	
+	@GetMapping("/invite")
+	public String invite(Model model, HttpSession session) {
+		User me = (User) session.getAttribute("loginUser");
+        if (me == null) {
+            return "redirect:/todo/homepage";
+        }
+        String myname = me.getName();
+		List<FriendUser> friends = friendUserService.getFriends(myname);
+        model.addAttribute("friends", friends);
+		return "invite";
+	}
+	@PostMapping("/invite")
+	public String inviteDone(RoomDTO dto, HttpSession session, String friendname) {
+  		// 친구 공유
+		Long roomid = (Long) session.getAttribute("roomid");
+  		userService.save(roomid, friendname);
+		return "invite";
+	}
 	@GetMapping("/homepage")
 	public String homepage() {
 		return "homepage";
@@ -225,7 +245,7 @@ public class TodolistController {
 
       return "redirect:/todo/selected_date_share";
   	}
-  //공유 방목록
+  //공유방 목록
   	@GetMapping("/share_room")
   	public String sharRoom(Model model, HttpSession session) {
   		User user = (User) session.getAttribute("loginUser");
@@ -255,12 +275,12 @@ public class TodolistController {
   	}
 
 
-  	//공유 일정 방 만들기
+  	//공유방 만들기
       @GetMapping("create_room")
       public String CreateRoomForm(HttpSession session) {
       	User user = (User) session.getAttribute("loginUser");
       	if (user == null) {
-      	    return "redirect:/todo/login"; // 로그인 되지 않았으면 로그인 페이지로 리다이렉트
+      	    return "redirect:/todo/login";   // 로그인 되지 않았으면 로그인 페이지로 리다이렉트
       	}
       	return "createroom";
       }
@@ -268,7 +288,7 @@ public class TodolistController {
       public String CreateRoom(RoomDTO room, HttpSession session, Model model) {
       	User user = (User) session.getAttribute("loginUser");
       	String email = user.getEmail();
-      	userService.save(room, email);//DB에 저장
+      	userService.save(room, email);    //DB에 저장
       	return "redirect:/todo/share_room";
       }
       
@@ -295,7 +315,7 @@ public class TodolistController {
   	    shareTodoService.updateShareTodo(id, sharetodo);
   	    return "redirect:/todo/selected_date_share?selectedDate=" + selectedDate;
   	}
-      
+    
 	// 소셜(친구 목록)
     @GetMapping("/social")
     public String friendsList(Model model, HttpSession session) {
