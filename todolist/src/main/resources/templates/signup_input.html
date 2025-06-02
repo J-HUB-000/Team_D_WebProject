@@ -7,11 +7,10 @@
  <body>
  <h3>사용자 등록</h3>
  <form th:action="@{/todo/signup}" method="post">
- <p>이름: <input type="text" name="name"/></p>
- <p>이메일: <input type="email" name="email"/></p>
- <p>암호: <input type="password" name="passwd"/></p>
- <p>별명: <input type="text" name="nickname"/></p>
- <p>전화번호: <input type="text" name="phone"/></p>
+ <p>이름: <input type="text" name="name" required></p>
+ <p>이메일: <input type="email" name="email" required></p>
+ <p>암호: <input type="password" name="passwd" required></p>
+ <p>전화번호: <input type="text" name="phone"></p>
  <p th:if="${error}" th:text="${error}" style="color:red;"></p>
     <p><input type="reset" value="취소"/>
     <input type="submit" value="등록"/>

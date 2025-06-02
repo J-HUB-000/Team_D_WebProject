@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>사용자 검색 결과</title>
+</head>
+<body>
+    <div th:if="${passwd}">
+        <p>비밀번호: <span th:text="${passwd}"></span></p>
+    </div>
+    <div th:if="${error}">
+        <p style="color:red;" th:text="${error}"></p>
+    </div>
+    <button onclick="location.href='/todo/findpasswd'">다시 검색</button>
+</body>
+</html>

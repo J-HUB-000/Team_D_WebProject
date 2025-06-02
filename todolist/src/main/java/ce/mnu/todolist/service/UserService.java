@@ -22,14 +22,14 @@ public class UserService {
 	@Autowired
 	private ShareTodoRepository shareTodoRepository;
 	@Autowired
-	private ShareFriendsRepository shareFriednsRepository;
+	private ShareFriendsRepository shareFriendsRepository;
 
 	
 	//DTO 클래스에서 가져온 데이터를 SiteUserRepository클래스에 저장.
 	public void save(UserDTO dto) {
 		User user = new User(dto.getName(), 
 				dto.getEmail(), dto.getPasswd(),
-				dto.getNickname(), dto.getPhone());
+				dto.getPhone());
 		userRepository.save(user);
 	}
 	public boolean isEmailExists(String email) {
@@ -42,8 +42,17 @@ public class UserService {
 	public User login(String email, String passwd) {
         return userRepository.findByEmailAndPasswd(email, passwd);
     }
+	// 이메일에 해당하는 객체(투플) 가져오기
 	public User findByEmail(String email) {
 	    return userRepository.findByEmail(email);
+	}
+	// 이름에 해당하는 객체(투플) 가져오기
+	public User findByUserName(String name) {
+		return userRepository.findByName(name);
+	}
+	// 친구 이메일에 해당하는 객체(투플) 가져오기
+	public List<ShareFriends> findByFriendEmail(String friendemail) {
+		return shareFriendsRepository.findByFriendemail(friendemail);
 	}
 	
 	//입력받은 공유방 정보 dto객체로 받아서 테이블에 저장하는 메서드
@@ -71,12 +80,26 @@ public class UserService {
 	public List<ShareRoom> getRoomsByOwnerEmail(String email) {
 	    return shareRoomRepository.findByEmail(email);
 	}
+	// 공유방의 roomId를 찾기
+	public List<ShareRoom> getRoomsByRoomid(Long roomid) {
+		return shareRoomRepository.findByRoomid(roomid);
+	}
+	// 공유한 친구로부터 roomId 찾기
+	public List<String> getAllRoomids() {
+		return shareFriendsRepository.findAllRoomid();
+	}
+	
 	// 공유일정 친구 공유(초대)
-	public void save(Long roomid, String name) {
+	public void save(Long roomid, String name, String email) {
 		ShareFriends shareFriends = new ShareFriends();
 		shareFriends.setRoomid(roomid);
 		shareFriends.setName(name);
-		shareFriednsRepository.save(shareFriends);
+		shareFriends.setFriendemail(email);
+		shareFriendsRepository.save(shareFriends);
+	}
+	// 공유한 모든 친구의 이메일 가져오기
+	public List<String> getAllFriendEmails() {
+		return shareFriendsRepository.findAllFriendEmails();
 	}
 }
 

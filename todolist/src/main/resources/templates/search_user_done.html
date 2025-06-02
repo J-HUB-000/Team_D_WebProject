@@ -1,21 +1,38 @@
-<div th:if="${name}">
-    <table border="1" style="margin: auto;">
-        <thead>
-            <tr>
-                <th>사용자명</th>
-                <th>친구 요청</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td th:text="${name}"></td>
-                <td>
-                    <form th:action="@{/todo/send_friend_request}" method="post">
-                        <input type="hidden" name="toUser" th:value="${name}">
-                        <button type="submit">친구 요청</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>검색 결과</title>
+</head>
+<body>
+    <h2>검색 결과</h2>
+    <div th:if="${error}">
+        <p th:text="${error}" style="color:red;"></p>
+    </div>
+    <th:block th:if="${error} == null">
+    <div th:if="${name}">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>사용자명</th>
+                    <th>친구 요청</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${name}"></td>
+                    <td>
+                        <form th:action="@{/todo/send_friend_request}" method="post">
+                            <input type="hidden" name="toUser" th:value="${name}">
+                            <button type="submit">친구 요청</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </th:block>
+    <button onclick="location.href='/todo/social'">친구 목록으로</button>
+    <button onclick="location.href='/todo/search_user'">다시 검색</button>
+</body>
+</html>

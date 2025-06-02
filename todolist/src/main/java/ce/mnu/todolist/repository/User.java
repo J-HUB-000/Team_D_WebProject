@@ -17,14 +17,12 @@ public class User {
     private String email;
     private String name;
     private String passwd;
-    private String nickname;
     private String phone;
 
-    public User(String name, String email, String passwd, String nickname, String phone) {
+    public User(String name, String email, String passwd, String phone) {
         this.name = name;
         this.email = email;
         this.passwd = passwd;
-        this.nickname = nickname;
         this.phone = phone;
     }
 }

@@ -3,70 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>메인 페이지</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 100px;
+    <script>
+        function requireLogin() {
+            alert("로그인을 먼저 해주세요.");
         }
-        .button-group {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        .my-btn {
-            padding: 16px 32px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .my-btn:hover {
-            background-color: #357a38;
-        }
-        /* 로그아웃 버튼만 빨간색 스타일 */
-        .logout-btn {
-            background-color: #e53935;
-            position: fixed;
-            left: 50%;
-            bottom: 40px;
-            transform: translateX(-50%);
-            width: 200px;
-            font-size: 18px;
-            padding: 16px 0;
-            border-radius: 8px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s;
-            z-index: 100;
-        }
-        .logout-btn:hover {
-            background-color: #b71c1c;
-        }
-    </style>
+    </script>
 </head>
 <body>
     <h1>메인 페이지</h1>
-    <div class="button-group">
+    <div>
         <!-- 로그인 안 했을 때 -->
-        <button class="my-btn"
-                th:if="${session.loginUser == null}"
+        <button th:if="${session.loginUser == null}"
                 onclick="location.href='/todo/login'">로그인</button>
         <!-- 로그인 했을 때 -->
-        <button class="my-btn"
-                th:if="${session.loginUser != null}"
+        <button th:if="${session.loginUser != null}"
                 onclick="location.href='/todo/userinfo'">정보보기</button>
-        <button class="my-btn" onclick="location.href='/my-schedule'">내 일정</button>
-        <button class="my-btn" onclick="location.href='/shared-schedule'">공유 일정</button>
-        <button class="my-btn" onclick="location.href='/social'">소셜</button>
+
+        <!-- 내 일정 버튼 -->
+        <button th:if="${session.loginUser != null}"
+            onclick="location.href='/todo/my_todo'">내 일정</button>
+        <button th:if="${session.loginUser == null}"
+            onclick="requireLogin()">내 일정</button>
+
+        <!-- 공유 일정 버튼 -->
+        <button th:if="${session.loginUser != null}"
+            onclick="location.href='/todo/share_room'">공유 일정</button>
+        <button th:if="${session.loginUser == null}"
+            onclick="requireLogin()">공유 일정</button>
+
+        <!-- 소셜 버튼 -->
+        <button th:if="${session.loginUser != null}"
+            onclick="location.href='/todo/social'">소셜</button>
+        <button class="my-btn"
+            th:if="${session.loginUser == null}"
+            onclick="requireLogin()">소셜</button>
     </div>
     <!-- 로그아웃 버튼: 로그인 했을 때만 하단 중앙에 표시 -->
-    <button class="logout-btn"
-            th:if="${session.loginUser != null}"
+    <button th:if="${session.loginUser != null}"
             onclick="location.href='/todo/logout'">로그아웃</button>
 </body>
 </html>

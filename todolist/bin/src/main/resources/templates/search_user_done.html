@@ -1,0 +1,21 @@
+<div th:if="${name}">
+    <table border="1" style="margin: auto;">
+        <thead>
+            <tr>
+                <th>사용자명</th>
+                <th>친구 요청</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td th:text="${name}"></td>
+                <td>
+                    <form th:action="@{/todo/send_friend_request}" method="post">
+                        <input type="hidden" name="toUser" th:value="${name}">
+                        <button type="submit">친구 요청</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

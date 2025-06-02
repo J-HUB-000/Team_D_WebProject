@@ -2,6 +2,7 @@ package ce.mnu.todolist;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,9 +62,10 @@ public class TodolistController {
 	}
 	@PostMapping("/invite")
 	public String inviteDone(RoomDTO dto, HttpSession session, String friendname) {
-  		// 친구 공유
 		Long roomid = (Long) session.getAttribute("roomid");
-  		userService.save(roomid, friendname);
+		User user = userService.findByUserName(friendname);
+		String friendemail = user.getEmail();
+  		userService.save(roomid, friendname, friendemail);
 		return "invite";
 	}
 	@GetMapping("/homepage")
@@ -245,20 +247,37 @@ public class TodolistController {
 
       return "redirect:/todo/selected_date_share";
   	}
-  //공유방 목록
+    //공유방 목록
   	@GetMapping("/share_room")
   	public String sharRoom(Model model, HttpSession session) {
-  		User user = (User) session.getAttribute("loginUser");
+  	    User user = (User) session.getAttribute("loginUser");
   	    if (user == null) {
   	        return "redirect:/todo/login";
   	    }
   	    String email = user.getEmail();
-  		List<ShareRoom> rooms = userService.getRoomsByOwnerEmail(email);
-  		model.addAttribute("rooms",rooms);
-  		model.addAttribute("loginUserEmail", email);
-  	return "share_roomlist";
+
+  	    // 내가 소유한 방
+  	    List<ShareRoom> rooms = userService.getRoomsByOwnerEmail(email);
+  	    model.addAttribute("rooms", rooms);
+  	    model.addAttribute("loginUserEmail", email);
+
+  	    // 내가 공유받은 방
+  	    List<ShareFriends> shareFriends = userService.findByFriendEmail(email);
+  	    List<Long> sharedRoomIds = shareFriends.stream()
+  	        .map(ShareFriends::getRoomid)
+  	        .distinct()
+  	        .collect(Collectors.toList());
+
+  	    List<ShareRoom> sharedRooms = new ArrayList<>();
+  	    for (Long roomid : sharedRoomIds) {
+  	        sharedRooms.addAll(userService.getRoomsByRoomid(roomid));
+  	    }
+  	    model.addAttribute("sharedRooms", sharedRooms);
+
+  	    return "share_roomlist";
   	}
-  //공유방 삭제
+
+    //공유방 삭제
   	@PostMapping("/todo/delete_room")
   	public String deleteRoom(Long roomid, HttpSession session) {
   	    User user = (User) session.getAttribute("loginUser");
@@ -267,14 +286,12 @@ public class TodolistController {
   	    }
   	    String email = user.getEmail();
   	    ShareRoom room = shareRoomRepository.findById(roomid).orElse(null);
-  	   // 호스트만 삭제 가능
+  	    // 호스트만 삭제 가능
   	    if (room != null && room.getEmail().equals(email)) {
 			userService.deleteRoomAndShareTodos(roomid); // 방과 일정 모두 삭제
 		}
   	    return "redirect:/todo/share_room";
   	}
-
-
   	//공유방 만들기
       @GetMapping("create_room")
       public String CreateRoomForm(HttpSession session) {
@@ -355,7 +372,11 @@ public class TodolistController {
             return "redirect:/todo/homepage";
         }
         User user = userService.findByEmail(email);
+        User me = (User) session.getAttribute("loginUser");
         if (user != null) {
+        	if (email.equals(me.getEmail())) {
+        		model.addAttribute("error", "본인의 이메일입니다.");
+        	}
             model.addAttribute("name", user.getName());
         } else {
             model.addAttribute("error", "해당 이메일로 등록된 사용자가 없습니다.");

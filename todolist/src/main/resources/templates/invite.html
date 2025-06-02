@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>친구 초대</title>
+</head>
+<body>
+<h3>친구 초대</h3>
+<table border ="1">
+<tr><th>친구 목록</th><th>공유 현황</th></tr>
+<tr th:each="friend : ${friends}">
+<td th:text="${friend.friendname}"></td>
+<td>
+<form action="/todo/invite" method="post">
+<input type="hidden" name="roomid" th:value="${roomid}">
+<input type="hidden" name="friendemail" th:value="${email}">
+<input type="hidden" name="friendname" th:value=${friend.friendname}>
+<button type="submit">공유하기</button>
+</form>
+</td>
+
+
+</table>
+</body>
+</html>
