@@ -3,51 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <title>공유 방 목록페이지</title>
+<style>
+body {
+    background: linear-gradient(120deg, orange 0%, yellow 100%);
+    height: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+/* 상단 버튼 바 */
+.top-btn-bar {
+    width: 100%;
+    background: white;
+    box-shadow: 0 0px 20px;
+    padding: 18px 0 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+.top-btn-bar .logo {
+    margin-left: 50px;
+    font-size: 2rem;
+    color: darkorange;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-decoration: none;  /* 밑줄 제거 */
+}
+.top-btn-bar .btn-group {
+    display: flex;
+    align-items: center;
+    margin-right: 32px;
+}
+.top-btn-bar button {
+    margin: 0 10px;
+    padding: 10px 28px;
+    background: linear-gradient(90deg, #ffb347, #ff9800);
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.top-btn-bar button:hover {
+    background: linear-gradient(90deg, #ff9800, #ffb347);
+}
+/* 메인 컨테이너(방 목록) */
+.room-container {
+    background: #fff;
+    max-width: 1800px;
+    margin: 120px auto 0 auto; /* 상단바 높이만큼 아래로 */
+    padding: 36px 32px 28px 32px;
+    border-radius: 40px;
+    box-shadow: 0 0px 0px, 0 0px 15px;
+}
+.room-container h3 {
+    color: darkorange;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+.room-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-size: 17px;
+}
+.room-table th, .room-table td {
+    border: 1px solid #ffd699;
+    padding: 10px 14px;
+    text-align: center;
+}
+.room-table th {
+    background: #fff6e0;
+    color: #ff9800;
+    font-weight: bold;
+}
+.room-table td {
+    background: #fff;
+    color: #444;
+}
+.room-table button, .room-container button {
+    padding: 7px 18px;
+    background: linear-gradient(90deg, #ffb347, #ff9800);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 2px 0;
+    transition: background 0.2s;
+}
+.room-table button:hover, .room-container button:hover {
+    background: linear-gradient(90deg, #ff9800, #ffb347);
+}
+.room-container .action-btns {
+    margin-bottom: 28px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+</style>
+<script>
+    function requireLogin() {
+        alert("로그인을 먼저 해주세요.");
+    }
+</script>
 </head>
 <body>
-<h3>내가 생성한 방</h3>
-<table border ='1'>
-<tr><th>id</th><th>호스트</th><th>방이름</th><th>설명</th></tr>
-<tr th:each="room : ${rooms}">
- <td th:text="${room.roomid}"></td>
-  <td th:text="${room.email}"></td>
-  <td th:text="${room.roomname}"></td>
-  <td th:text="${room.roomexp}"></td>
-  <td th:if="${room.email} == ${loginUserEmail}">
-	  <form th:action="@{/todo/delete_room}" method="post" style="display:inline;">
-	      <input type="hidden" name="roomid" th:value="${room.roomid}" />
-	      <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">방 삭제</button>
-	  </form>
-<button type="submit" th:onclick="|location.href='@{/todo/share_todo(roomid=${room.roomid})}'|">입장하기</button>
-</td>
-</tr>
-</table>
+<!-- 상단 버튼 바 -->
+<div class="top-btn-bar">
+    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
+    <div class="btn-group">
+        <button th:if="${session.loginUser != null}"
+                onclick="location.href='/todo/logout'">로그아웃</button>
+        <button th:if="${session.loginUser == null}"
+                onclick="location.href='/todo/login'">로그인</button>
+        <button th:if="${session.loginUser != null}"
+                onclick="location.href='/todo/userinfo'">정보보기</button>
+        <button th:if="${session.loginUser != null}"
+                onclick="location.href='/todo/my_todo'">내 일정</button>
+        <button th:if="${session.loginUser == null}"
+                onclick="requireLogin()">내 일정</button>
+        <button th:if="${session.loginUser != null}"
+                onclick="location.href='/todo/share_room'">공유 일정</button>
+        <button th:if="${session.loginUser == null}"
+                onclick="requireLogin()">공유 일정</button>
+        <button th:if="${session.loginUser != null}"
+                onclick="location.href='/todo/social'">소셜</button>
+        <button th:if="${session.loginUser == null}"
+                onclick="requireLogin()">소셜</button>
+    </div>
+</div>
 
-<button onclick="location.href='/todo/create_room'">방만들기</button>
-<button onclick="location.href='/todo/homepage'">메인으로</button>
+<!-- 방 목록 컨테이너 -->
+<div class="room-container">
+    <h3>내가 생성한 방</h3>
+    <table class="room-table">
+        <tr>
+            <th>id</th>
+            <th>호스트</th>
+            <th>방이름</th>
+            <th>설명</th>
+            <th>관리</th>
+        </tr>
+        <tr th:each="room : ${rooms}">
+            <td th:text="${room.roomid}"></td>
+            <td th:text="${room.email}"></td>
+            <td th:text="${room.roomname}"></td>
+            <td th:text="${room.roomexp}"></td>
+            <td>
+                <form th:if="${room.email} == ${loginUserEmail}"
+                      th:action="@{/todo/delete_room}" method="post" style="display:inline;">
+                    <input type="hidden" name="roomid" th:value="${room.roomid}" />
+                    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">방 삭제</button>
+                </form>
+                <button type="button"
+                        th:onclick="|location.href='@{/todo/share_todo(roomid=${room.roomid})}'|">
+                    입장하기
+                </button>
+            </td>
+        </tr>
+    </table>
+    <div class="action-btns">
+        <button onclick="location.href='/todo/create_room'">방 만들기</button>
+    </div>
 
-<h3>친구가 공유한 방</h3>
-<table border="1">
-    <tr>
-        <th>id</th>
-        <th>호스트</th>
-        <th>방이름</th>
-        <th>설명</th>
-        <th>입장</th>
-    </tr>
-    <tr th:each="sharedRoom : ${sharedRooms}">
-        <td th:text="${sharedRoom.roomid}"></td>
-        <td th:text="${sharedRoom.email}"></td>
-        <td th:text="${sharedRoom.roomname}"></td>
-        <td th:text="${sharedRoom.roomexp}"></td>
-        <td>
-            <button type="button"
-                    th:onclick="|location.href='@{/todo/share_todo(roomid=${sharedRoom.roomid})}'|">
-                입장하기
-            </button>
-        </td>
-    </tr>
-</table>
-
+    <h3>친구가 공유한 방</h3>
+    <table class="room-table">
+        <tr>
+            <th>id</th>
+            <th>호스트</th>
+            <th>방이름</th>
+            <th>설명</th>
+            <th>입장</th>
+        </tr>
+        <tr th:each="sharedRoom : ${sharedRooms}">
+            <td th:text="${sharedRoom.roomid}"></td>
+            <td th:text="${sharedRoom.email}"></td>
+            <td th:text="${sharedRoom.roomname}"></td>
+            <td th:text="${sharedRoom.roomexp}"></td>
+            <td>
+                <button type="button"
+                        th:onclick="|location.href='@{/todo/share_todo(roomid=${sharedRoom.roomid})}'|">
+                    입장하기
+                </button>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

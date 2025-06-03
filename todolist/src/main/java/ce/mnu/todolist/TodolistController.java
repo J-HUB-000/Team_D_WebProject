@@ -158,8 +158,8 @@ public class TodolistController {
 	public String myTodoProcess(String selectedDate, HttpSession session, Model model) {
 	    User user = (User) session.getAttribute("loginUser");
 	    if (user == null) {
-	        return "redirect:/todo/error";
-	    }
+        	model.addAttribute("error","로그인이 필요합니다.");
+        }
 	    List<MyTodo> todos = new ArrayList<>();
 	    if (selectedDate != null && !selectedDate.isEmpty()) {
 	        todos = myTodoService.findMyTodosByEmailAndDate(user.getEmail(), selectedDate);
