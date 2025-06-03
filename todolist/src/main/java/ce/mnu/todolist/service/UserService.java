@@ -23,7 +23,8 @@ public class UserService {
 	private ShareTodoRepository shareTodoRepository;
 	@Autowired
 	private ShareFriendsRepository shareFriendsRepository;
-
+	@Autowired
+	private ShareFriendsRepository shareShareFriendsRepository;
 	
 	//DTO 클래스에서 가져온 데이터를 SiteUserRepository클래스에 저장.
 	public void save(UserDTO dto) {
@@ -34,6 +35,9 @@ public class UserService {
 	}
 	public boolean isEmailExists(String email) {
         return userRepository.existsByEmail(email);
+    }
+	public boolean isNameExists(String name) {
+        return userRepository.existsByName(name);
     }
 	public Iterable<User> getAll() {
 		//SELECT * FROM site_user; 와 같은 의미
@@ -72,9 +76,10 @@ public class UserService {
 	}
 	//공유방 삭제
 	@Transactional
-	public void deleteRoomAndShareTodos(Long roomid) {
+	public void deleteRoomAndShareTodosAndShareFriends(Long roomid) {
 		shareTodoRepository.deleteByRoomid(roomid); // 일정 삭제
 	    shareRoomRepository.deleteById(roomid);     // 방 삭제
+	    shareShareFriendsRepository.deleteByRoomid(roomid); //공유받은 친구들도 삭제
 	}
 	//공유방 생성한 호스트 이메일 찾기
 	public List<ShareRoom> getRoomsByOwnerEmail(String email) {
@@ -101,5 +106,6 @@ public class UserService {
 	public List<String> getAllFriendEmails() {
 		return shareFriendsRepository.findAllFriendEmails();
 	}
+	
 }
 

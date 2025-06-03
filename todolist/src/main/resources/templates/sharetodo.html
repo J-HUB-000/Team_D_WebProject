@@ -39,7 +39,9 @@
       </tbody>
     </table>
   </div>
-  <p><a th:href="@{/todo/invite}"><button>친구 초대</button></a></p>
+  <p th:if="${loginUserEmail} == ${hostEmail}">
+  <a th:href="@{/todo/invite}"><button>친구 초대</button></a>
+  </p>
   <script>
     // 오늘 날짜 정보
     let today = new Date();

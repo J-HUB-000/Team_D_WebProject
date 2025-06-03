@@ -11,4 +11,5 @@ public interface ShareFriendsRepository extends CrudRepository<ShareFriends, Lon
 	@Query("select sf.roomid from ShareFriends sf")
 	List<String> findAllRoomid();
 	List<ShareFriends> findByFriendemail(String friendemail);
+	void deleteByRoomid(Long roomid);
 }

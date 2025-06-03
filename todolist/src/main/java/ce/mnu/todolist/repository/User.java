@@ -15,6 +15,7 @@ public class User {
     @Id
     @Column(length = 100) // 이메일 길이에 맞게 조정
     private String email;
+    @Column(length = 100, unique = true)
     private String name;
     private String passwd;
     private String phone;

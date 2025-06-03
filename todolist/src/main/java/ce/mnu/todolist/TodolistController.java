@@ -21,7 +21,6 @@ import ce.mnu.todolist.repository.ShareFriends;
 import ce.mnu.todolist.repository.ShareRoom;
 import ce.mnu.todolist.repository.ShareRoomRepository;
 import ce.mnu.todolist.repository.ShareTodo;
-import ce.mnu.todolist.repository.ShareTodoRepository;
 import ce.mnu.todolist.repository.User;
 import ce.mnu.todolist.service.FriendRequestService;
 import ce.mnu.todolist.service.FriendUserService;
@@ -48,7 +47,7 @@ public class TodolistController {
 	@Autowired
 	private ShareRoomRepository shareRoomRepository;
 	
-	
+	//공유방에 친구 초대
 	@GetMapping("/invite")
 	public String invite(Model model, HttpSession session) {
 		User me = (User) session.getAttribute("loginUser");
@@ -63,34 +62,22 @@ public class TodolistController {
 	@PostMapping("/invite")
 	public String inviteDone(RoomDTO dto, HttpSession session, String friendname) {
 		Long roomid = (Long) session.getAttribute("roomid");
-		User user = userService.findByUserName(friendname);
-		String friendemail = user.getEmail();
+		User user = userService.findByUserName(friendname);//친구 이름으로 User테이블의 행을 가져옴
+		String friendemail = user.getEmail(); //그 행의 이메일 값 = 친구이메일
   		userService.save(roomid, friendname, friendemail);
-		return "invite";
+		return "redirect:/todo/invite";
 	}
+	//홈페이지
 	@GetMapping("/homepage")
 	public String homepage() {
 		return "homepage";
 	}
+	//로그인 페이지
 	@GetMapping("/login")
     public String login() {
         return "login";
     }
-	@GetMapping("/logout")
-	public String logout(HttpSession session) {
-	    session.invalidate(); 					// 세션 전체 삭제 (로그아웃)
-	    return "redirect:/todo/homepage"; 		// 메인 페이지로 이동
-	}
-	@GetMapping("/userinfo")
-	public String userInfo(HttpSession session, Model model) {
-	    User user = (User) session.getAttribute("loginUser");
-	    if (user == null) {
-	        return "redirect:/todo/homepage";
-	    }
-	    model.addAttribute("user", user);
-	    return "userinfo";
-	}
-    @PostMapping("/login")
+	@PostMapping("/login")
     public String login(String email, String passwd, Model model, HttpSession session) {
         User user = userService.login(email, passwd);
         if (user != null) {
@@ -103,6 +90,22 @@ public class TodolistController {
             return "login";
         }
     }
+	//로그아웃 
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+	    session.invalidate(); 					// 세션 전체 삭제 (로그아웃)
+	    return "redirect:/todo/homepage"; 		// 메인 페이지로 이동
+	}
+	//내 정보보기
+	@GetMapping("/userinfo")
+	public String userInfo(HttpSession session, Model model) {
+	    User user = (User) session.getAttribute("loginUser");
+	    if (user == null) {
+	        return "redirect:/todo/homepage";
+	    }
+	    model.addAttribute("user", user);
+	    return "userinfo";
+	}
     // 비밀번호 찾기 
     @GetMapping("/findpasswd")
     public String findPasswdForm() {
@@ -129,6 +132,10 @@ public class TodolistController {
 	public String signup(UserDTO user, Model model) {
 	    if (userService.isEmailExists(user.getEmail())) {
 	        model.addAttribute("error", "이미 등록된 이메일입니다.");
+	        return "signup_input";
+	    }
+	    if (userService.isNameExists(user.getName())) {
+	        model.addAttribute("error", "이미 사용 중인 이름입니다.");
 	        return "signup_input";
 	    }
 	    userService.save(user);
@@ -207,9 +214,19 @@ public class TodolistController {
 
     //공유 일정
     @GetMapping("/share_todo")
-    public String ShareTodo(@RequestParam Long roomid, HttpSession session){
+    public String ShareTodo(@RequestParam Long roomid, HttpSession session, Model model){
     	session.setAttribute("roomid", roomid); // 세션에 저장
-    	return "sharetodo";
+    	User user = (User) session.getAttribute("loginUser");
+  	    if (user == null) {
+  	        return "redirect:/todo/login";
+  	    }
+  	    ShareRoom room = shareRoomRepository.findById(roomid).orElse(null);
+  	    if (room == null) {
+  	    	return "redirect:/todo/share_room";
+  	    }
+  	    model.addAttribute("loginUserEmail", user.getEmail()); //로그인 유저 이메일 전달
+  	    model.addAttribute("hostEmail", room.getEmail()); // 방 호스트 이메일 전달
+  	    return "sharetodo";
     }
   //공유 일정 조회
     @GetMapping("/selected_date_share")
@@ -288,7 +305,7 @@ public class TodolistController {
   	    ShareRoom room = shareRoomRepository.findById(roomid).orElse(null);
   	    // 호스트만 삭제 가능
   	    if (room != null && room.getEmail().equals(email)) {
-			userService.deleteRoomAndShareTodos(roomid); // 방과 일정 모두 삭제
+			userService.deleteRoomAndShareTodosAndShareFriends(roomid); // 방과 일정 모두 삭제
 		}
   	    return "redirect:/todo/share_room";
   	}
