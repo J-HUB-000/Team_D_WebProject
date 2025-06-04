@@ -1,7 +1,9 @@
 package ce.mnu.todolist;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,12 +53,28 @@ public class TodolistController {
 	@GetMapping("/invite")
 	public String invite(Model model, HttpSession session) {
 		User me = (User) session.getAttribute("loginUser");
-        if (me == null) {
-            return "redirect:/todo/homepage";
-        }
-        String myname = me.getName();
+		if (me == null) {
+			return "redirect:/todo/homepage";
+		}
+
+		Long roomid = (Long) session.getAttribute("roomid");
+		String myname = me.getName();
+
 		List<FriendUser> friends = friendUserService.getFriends(myname);
-        model.addAttribute("friends", friends);
+		List<ShareFriends> shareFriends = userService.getRoomid(roomid);
+
+		// 친구 이름 기준으로 공유 여부를 Map에 저장
+		Map<String, Boolean> sharedMap = new HashMap<>();
+		for (FriendUser friend : friends) {
+			boolean isShared = shareFriends.stream()
+					.anyMatch(sf -> sf.getRoomid().equals(roomid) && sf.getName().equals(friend.getFriendname()));
+			sharedMap.put(friend.getFriendname(), isShared);
+		}
+
+		model.addAttribute("friends", friends);
+		model.addAttribute("session_roomid", roomid);
+		model.addAttribute("sharedMap", sharedMap);
+
 		return "invite";
 	}
 	@PostMapping("/invite")
@@ -65,6 +83,12 @@ public class TodolistController {
 		User user = userService.findByUserName(friendname);//친구 이름으로 User테이블의 행을 가져옴
 		String friendemail = user.getEmail(); //그 행의 이메일 값 = 친구이메일
   		userService.save(roomid, friendname, friendemail);
+		return "redirect:/todo/invite";
+	}
+	@PostMapping("/invite_delete")
+	public String inviteDelete(String friendname) {
+		System.out.print(friendname);
+		userService.deleteFriend(friendname); 
 		return "redirect:/todo/invite";
 	}
 	//홈페이지
@@ -158,7 +182,7 @@ public class TodolistController {
 	public String myTodoProcess(String selectedDate, HttpSession session, Model model) {
 	    User user = (User) session.getAttribute("loginUser");
 	    if (user == null) {
-        	model.addAttribute("error","로그인이 필요합니다.");
+        	model.addAttribute("error","로그인이 필요한 서비스입니다.");
         }
 	    List<MyTodo> todos = new ArrayList<>();
 	    if (selectedDate != null && !selectedDate.isEmpty()) {
@@ -234,7 +258,7 @@ public class TodolistController {
         User user = (User) session.getAttribute("loginUser");
         Long roomid = (Long) session.getAttribute("roomid");
         if (user == null) {
-        	model.addAttribute("error","로그인이 필요합니다.");
+        	model.addAttribute("error","로그인이 필요한 서비스입니다.");
         }
         List<ShareTodo> sharetodos = new ArrayList<>();
         if (selectedDate != null && !selectedDate.isEmpty() && roomid != null) {

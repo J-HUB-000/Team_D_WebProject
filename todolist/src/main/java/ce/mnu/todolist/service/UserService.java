@@ -58,6 +58,16 @@ public class UserService {
 	public List<ShareFriends> findByFriendEmail(String friendemail) {
 		return shareFriendsRepository.findByFriendemail(friendemail);
 	}
+
+	// 공유된 친구의 roomid 가져오기
+	public List<ShareFriends> getRoomid(Long roomid) {
+		return  shareFriendsRepository.findByRoomid(roomid);
+	}
+	// 공유 받은 친구 삭제하기
+	@Transactional
+	public void deleteFriend(String name) {
+		shareFriendsRepository.deleteByName(name);
+	}
 	
 	//입력받은 공유방 정보 dto객체로 받아서 테이블에 저장하는 메서드
 	public void save(RoomDTO dto, String email) {
