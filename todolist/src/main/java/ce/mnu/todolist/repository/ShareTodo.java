@@ -20,6 +20,7 @@ public class ShareTodo {
     private Long id;
 	private Long roomid;
     private String email;
+    private String name;
     private String callendardate;
     private String sharetodo;
 }

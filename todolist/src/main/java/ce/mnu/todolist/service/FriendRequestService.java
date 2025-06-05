@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ce.mnu.todolist.repository.FriendRequest;
 import ce.mnu.todolist.repository.FriendRequestRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class FriendRequestService {
@@ -22,24 +23,19 @@ public class FriendRequestService {
     public List<FriendRequest> getRequestsForUser(String toUser) {
         return friendRequestRepository.findByToUserAndStatus(toUser, "PENDING");
     }
+    public FriendRequest getStatusByName(String toUser) {
+    	return friendRequestRepository.findByStatus(toUser);
+    }
 
     public FriendRequest findById(Long id) {
         return friendRequestRepository.findById(id).orElse(null);
     }
-    //친구 요청 수락
-    public void acceptRequest(Long id) {
+    //친구 요청 삭제
+    @Transactional
+    public void deleteRequest(Long id) {
         FriendRequest req = friendRequestRepository.findById(id).orElse(null);
         if (req != null) {
-            req.setStatus("ACCEPTED");
-            friendRequestRepository.save(req);
-        }
-    }
-    //친구 요청 거절
-    public void rejectRequest(Long id) {
-        FriendRequest req = friendRequestRepository.findById(id).orElse(null);
-        if (req != null) {
-            req.setStatus("REJECTED");
-            friendRequestRepository.save(req);
+            friendRequestRepository.deleteById(id);
         }
     }
 }

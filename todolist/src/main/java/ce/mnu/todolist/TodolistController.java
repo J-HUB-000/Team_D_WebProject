@@ -271,7 +271,7 @@ public class TodolistController {
         return "selecteddate_share";
     }
 
-  //공유 일정 등록
+    //공유 일정 등록
   	@PostMapping("/add_sharetodo")
   	public String addShareTodo(String selectedDate, String sharetodo, HttpSession session, Model model, RedirectAttributes res) {
   		User user = (User) session.getAttribute("loginUser");
@@ -279,10 +279,12 @@ public class TodolistController {
   	    if (user == null) {
   	        return "redirect:/todo/error";
   	    }
-  	    String email = user.getEmail();;
-  	    shareTodoService.addShareTodo(roomid, email, selectedDate, sharetodo);
+  	    String email = user.getEmail();
+  	    String name = user.getName();
+  	    shareTodoService.addShareTodo(roomid, email, name, selectedDate, sharetodo);
   	  res.addAttribute("roomid", roomid);
       res.addAttribute("email", email);
+      res.addAttribute("name", name);
       res.addAttribute("selectedDate", selectedDate);
       res.addAttribute("sharetodo", sharetodo);
 
@@ -409,19 +411,28 @@ public class TodolistController {
     // 사용자 검색 처리
     @PostMapping("/search_user")
     public String searchUserResult(String email, Model model, HttpSession session) {
-        if (session.getAttribute("loginUser") == null) {
+        User me = (User) session.getAttribute("loginUser");
+        if (me == null) {
             return "redirect:/todo/homepage";
         }
         User user = userService.findByEmail(email);
-        User me = (User) session.getAttribute("loginUser");
-        if (user != null) {
-        	if (email.equals(me.getEmail())) {
-        		model.addAttribute("error", "본인의 이메일입니다.");
-        	}
-            model.addAttribute("name", user.getName());
-        } else {
+        if (user == null) {
             model.addAttribute("error", "해당 이메일로 등록된 사용자가 없습니다.");
+            return "search_user_done";
         }
+        if (email.equals(me.getEmail())) {
+            model.addAttribute("error", "본인의 이메일입니다.");
+            return "search_user_done";
+        }
+        String friendName = user.getName();
+        FriendUser friend = (FriendUser) friendUserService.existFriend(friendName, me.getName());
+        // 이미 친구인 경우
+        if (friend != null && friendName.equals(friend.getFriendname())) {
+            model.addAttribute("error", "이미 등록된 친구입니다.");
+            return "search_user_done";
+        }
+        // 모든 조건을 통과한 경우
+        model.addAttribute("name", friendName);
         return "search_user_done";
     }
     // 친구 요청 보내기
@@ -439,8 +450,8 @@ public class TodolistController {
         if (me == null) return "redirect:/todo/login";
         FriendRequest req = friendRequestService.findById(id);
         if (req != null && req.getToUser().equals(me.getName())) {
-            friendRequestService.acceptRequest(id);
             friendUserService.addFriend(req.getFromUser(), req.getToUser());
+            friendRequestService.deleteRequest(id);
         }
         return "redirect:/todo/social";
     }
@@ -451,7 +462,7 @@ public class TodolistController {
         if (me == null) return "redirect:/todo/login";
         FriendRequest req = friendRequestService.findById(id);
         if (req != null && req.getToUser().equals(me.getName())) {
-            friendRequestService.rejectRequest(id);
+            friendRequestService.deleteRequest(id);
         }
         return "redirect:/todo/social";
     }

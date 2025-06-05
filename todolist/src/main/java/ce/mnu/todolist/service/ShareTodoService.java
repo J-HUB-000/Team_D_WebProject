@@ -14,9 +14,10 @@ public class ShareTodoService {
 	@Autowired
     private ShareTodoRepository shareTodoRepository;
 
-    public void addShareTodo(Long roomid, String email, String selectedDate, String sharetodos) {
+    public void addShareTodo(Long roomid, String email, String name, String selectedDate, String sharetodos) {
     	ShareTodo sharetodo = new ShareTodo();
     	sharetodo.setEmail(email);
+    	sharetodo.setName(name);
     	sharetodo.setCallendardate(selectedDate);
     	sharetodo.setSharetodo(sharetodos);
     	sharetodo.setRoomid(roomid);

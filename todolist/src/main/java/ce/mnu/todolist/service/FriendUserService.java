@@ -22,6 +22,9 @@ public class FriendUserService {
     public List<FriendUser> getFriends(String myname) {
         return friendUserRepository.findByMyname(myname);
     }
+    public FriendUser existFriend(String friendname, String myname) {
+    	return friendUserRepository.findByFriendnameAndMyname(friendname, myname);
+    }
     
     @Transactional
     public void deleteFriend(String myname, String friendname) {

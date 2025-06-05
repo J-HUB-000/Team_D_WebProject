@@ -7,5 +7,7 @@ public interface FriendRequestRepository extends CrudRepository<FriendRequest, L
     boolean existsByFromUserAndToUserAndStatus(String fromUser, String toUser, String status);
     List<FriendRequest> findByToUserAndStatus(String toUser, String status);
     List<FriendRequest> findByFromUserAndStatus(String fromUser, String status);
+    FriendRequest findByStatus(String toUser);
+    void deleteById(Long id);
 }
 

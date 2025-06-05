@@ -128,7 +128,7 @@ body {
 <div class="postit-board">
   <div class="postit" th:each="sharetodo : ${sharetodos}">
     <div class="sharetodo-header">
-      <span class="sharetodo-writer" th:text="${sharetodo.email}"></span>
+      <span class="sharetodo-writer" th:text="${sharetodo.name}"></span>
     </div>
     <div class="postit-content">
       <!-- 수정 중인 일정이면 입력 폼, 아니면 텍스트만 -->
