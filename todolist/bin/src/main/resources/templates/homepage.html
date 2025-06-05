@@ -66,7 +66,7 @@
     </style>
     <script>
         function requireLogin() {
-            alert("로그인을 먼저 해주세요.");
+            alert("로그인이 필요한 서비스입니다.");
         }
     </script>
 </head>
@@ -75,14 +75,12 @@
 <div class="top-btn-bar">
     <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
     <div class="btn-group">
-        <!-- 로그아웃 버튼: 로그인 했을 때만 하단에 표시 -->
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/logout'">로그아웃</button>
         <!-- 로그인/정보보기 -->
         <button th:if="${session.loginUser == null}"
-                onclick="location.href='/todo/login'">로그인</button>
+                onclick="location.href='/todo/login'"
+                style="background: linear-gradient(90deg, #6ec1e4, #4286f4)">로그인</button>
         <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/userinfo'">정보보기</button>
+                onclick="location.href='/todo/userinfo'">내 정보</button>
         <!-- 내 일정 -->
         <button th:if="${session.loginUser != null}"
                 onclick="location.href='/todo/my_todo'">내 일정</button>
@@ -98,11 +96,15 @@
                 onclick="location.href='/todo/social'">소셜</button>
         <button th:if="${session.loginUser == null}"
                 onclick="requireLogin()">소셜</button>
+        <!-- 로그아웃 버튼: 로그인 했을 때만 하단에 표시 -->
+        <button th:if="${session.loginUser != null}"
+                onclick="location.href='/todo/logout'"
+                style="background: linear-gradient(90deg, #ff7e7e, #ff4e50)">로그아웃</button>
     </div>
 </div>
 <!-- 메인 컨테이너 -->
 <div class="main-container">
-    <p>여러분의 일정을 등록하세요!</p>
+    <p>당신의 일정을 계획하세요!</p>
 </div>
 </body>
 </html>
