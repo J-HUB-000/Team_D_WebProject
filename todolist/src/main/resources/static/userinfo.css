@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>내 정보</title>
-    <style>
+@charset "UTF-8";
     body {
         background: linear-gradient(120deg, orange 0%, yellow 100%);
         height: 100%;
@@ -62,17 +57,3 @@
     .info-container button:hover {
         background: linear-gradient(90deg, #ff9800, #ffb347);
     }
-    </style>
-</head>
-<body>
-<div class="info-container">
-    <h2>내 정보</h2>
-    <table class="info-table">
-        <tr><th>이름</th><td th:text="${user.name}"></td></tr>
-        <tr><th>이메일</th><td th:text="${user.email}"></td></tr>
-        <tr><th>전화번호</th><td th:text="${user.phone}"></td></tr>
-    </table>
-    <button onclick="location.href='/todo/homepage'">메인으로</button>
-</div>
-</body>
-</html>

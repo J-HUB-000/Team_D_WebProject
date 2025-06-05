@@ -15,7 +15,7 @@
     .top-btn-bar {
         width: 100%;
         background: white;
-        box-shadow: 0 0px 20px;
+        box-shadow: 0 0px 5px;
         padding: 18px 0 10px 0;
         display: flex;
         justify-content: space-between; /* 왼쪽-오른쪽 정렬 */
@@ -60,46 +60,34 @@
         margin: 120px auto 0 auto; /* 상단 버튼바 높이만큼 아래로 */
         padding: 36px 32px 280px 32px;
         border-radius: 10px;
-        box-shadow: 0 0px 0px, 0 0px 10px;
+        box-shadow: 0 0px 0px, 0 0px 5px;
         text-align: center;
     }
     </style>
-    <script>
-        function requireLogin() {
-            alert("로그인이 필요한 서비스입니다.");
-        }
-    </script>
 </head>
 <body>
 <!-- 상단 버튼 바 -->
 <div class="top-btn-bar">
     <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
     <div class="btn-group">
-        <!-- 로그인/정보보기 -->
-        <button th:if="${session.loginUser == null}"
-                onclick="location.href='/todo/login'"
-                style="background: linear-gradient(90deg, #6ec1e4, #4286f4)">로그인</button>
         <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/userinfo'">내 정보</button>
-        <!-- 내 일정 -->
+                onclick="location.href='/todo/logout'">로그아웃</button>
+        <button th:if="${session.loginUser == null}"
+                onclick="location.href='/todo/login'">로그인</button>
+        <button th:if="${session.loginUser != null}"
+                onclick="location.href='/todo/userinfo'">정보보기</button>
         <button th:if="${session.loginUser != null}"
                 onclick="location.href='/todo/my_todo'">내 일정</button>
         <button th:if="${session.loginUser == null}"
                 onclick="requireLogin()">내 일정</button>
-        <!-- 공유 일정 -->
         <button th:if="${session.loginUser != null}"
                 onclick="location.href='/todo/share_room'">공유 일정</button>
         <button th:if="${session.loginUser == null}"
                 onclick="requireLogin()">공유 일정</button>
-        <!-- 소셜 -->
         <button th:if="${session.loginUser != null}"
                 onclick="location.href='/todo/social'">소셜</button>
         <button th:if="${session.loginUser == null}"
                 onclick="requireLogin()">소셜</button>
-        <!-- 로그아웃 버튼: 로그인 했을 때만 하단에 표시 -->
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/logout'"
-                style="background: linear-gradient(90deg, #ff7e7e, #ff4e50)">로그아웃</button>
     </div>
 </div>
 <!-- 메인 컨테이너 -->

@@ -3,79 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>메인 페이지</title>
-    <style>
-    body {
-        background: linear-gradient(120deg, orange 0%, yellow 100%);
-        height: 100%;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-    }
-    /* 상단 버튼 바 */
-    .top-btn-bar {
-        width: 100%;
-        background: white;
-        box-shadow: 0 0px 5px;
-        padding: 18px 0 10px 0;
-        display: flex;
-        justify-content: space-between; /* 왼쪽-오른쪽 정렬 */
-        align-items: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 100;
-    }
-    .top-btn-bar .logo {
-        margin-left: 50px;
-        font-size: 2rem;
-        color: darkorange;
-        font-weight: bold;
-        letter-spacing: 2px;
-        text-decoration: none;  /* 밑줄 제거 */
-    }
-    .top-btn-bar .btn-group {
-        display: flex;
-        align-items: center;
-        margin-right: 32px;
-    }
-    .top-btn-bar button {
-        margin: 0 10px;
-        padding: 10px 28px;
-        background: linear-gradient(90deg, #ffb347, #ff9800);
-        color: #fff;
-        border: none;
-        border-radius: 15px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-    .top-btn-bar button:hover {
-        background: linear-gradient(90deg, #ff9800, #ffb347);
-    }
-    /* 메인 컨테이너(중앙) */
-    .main-container {
-        background: #fff;
-        max-width: 1800px;
-        margin: 120px auto 0 auto; /* 상단 버튼바 높이만큼 아래로 */
-        padding: 36px 32px 280px 32px;
-        border-radius: 10px;
-        box-shadow: 0 0px 0px, 0 0px 5px;
-        text-align: center;
-    }
-    </style>
+    <link rel="stylesheet" href="/homepage.css">
+    <link rel="stylesheet" href="/topbtn.css">
 </head>
 <body>
 <!-- 상단 버튼 바 -->
 <div class="top-btn-bar">
     <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
     <div class="btn-group">
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/logout'">로그아웃</button>
-        <button th:if="${session.loginUser == null}"
+        <button class="loginbtn" th:if="${session.loginUser == null}"
                 onclick="location.href='/todo/login'">로그인</button>
         <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/userinfo'">정보보기</button>
+                onclick="location.href='/todo/userinfo'">내 정보</button>
         <button th:if="${session.loginUser != null}"
                 onclick="location.href='/todo/my_todo'">내 일정</button>
         <button th:if="${session.loginUser == null}"
@@ -84,10 +23,12 @@
                 onclick="location.href='/todo/share_room'">공유 일정</button>
         <button th:if="${session.loginUser == null}"
                 onclick="requireLogin()">공유 일정</button>
-        <button th:if="${session.loginUser != null}"
+        <button class="socialbtn" th:if="${session.loginUser != null}"
                 onclick="location.href='/todo/social'">소셜</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="requireLogin()">소셜</button>
+        <button class="socialbtn" th:if="${session.loginUser == null}"
+    	        onclick="requireLogin()">소셜</button>
+		<button class="logoutbtn" th:if="${session.loginUser != null}"
+                onclick="location.href='/todo/logout'">로그아웃</button>
     </div>
 </div>
 <!-- 메인 컨테이너 -->

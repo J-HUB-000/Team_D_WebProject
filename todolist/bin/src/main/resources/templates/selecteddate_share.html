@@ -115,9 +115,6 @@ body {
 <!-- 로그인된 상태면, 정상 처리 -->
 <div th:unless = "${error}">
 <div class="selected-date" th:text="${selectedDate}"></div>
-<div class="no-todo" th:if="${#lists.isEmpty(sharetodos)}" >
-해당 날짜에 일정이 없습니다.
-</div>
 <!-- 일정 추가 폼 -->
 <form class="add-form-top" action="/todo/add_sharetodo" method="post"
 		style="position:sticky; top:0; z-index:10; padding-top:16px; padding-bottom:10px; margin-bottom:18px; max-width:600px; margin-left:auto; margin-right:auto;">
@@ -125,6 +122,9 @@ body {
   <input type="text" name="sharetodo" placeholder="일정을 입력하세요" required/>
   <button type="submit">등록</button>
 </form>
+<div class="no-todo" th:if="${#lists.isEmpty(sharetodos)}" >
+등록된 일정이 없습니다.
+</div>
 <div class="postit-board">
   <div class="postit" th:each="sharetodo : ${sharetodos}">
     <div class="sharetodo-header">

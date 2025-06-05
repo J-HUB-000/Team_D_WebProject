@@ -1,0 +1,76 @@
+@charset "UTF-8";
+    body {
+        background: linear-gradient(120deg, orange 0%, yellow 100%);
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+    /* 메인 컨테이너 */
+    .main-container {
+        background: #fff;
+        max-width: 900px;
+        margin: 120px auto 0 auto;
+        padding: 36px 32px 80px 32px;
+        border-radius: 10px;
+        box-shadow: 0 0px 0px, 0 0px 5px;
+        text-align: center;
+    }
+    .main-container h3 {
+        margin-top: 0;
+        font-size: 2rem;
+        color: #ff9800;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+    /* 테이블 스타일 */
+    .friend-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 36px;
+        background: #fafafa;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+    .friend-table th, .friend-table td {
+        padding: 18px 12px;
+        border-bottom: 1px solid #eee;
+        font-size: 1.1rem;
+    }
+    .friend-table th {
+        background: #ffe0b2;
+        color: #ff9800;
+        font-weight: bold;
+        border-bottom: 2px solid #ffb347;
+    }
+    .friend-table tr:last-child td {
+        border-bottom: none;
+    }
+    .friend-table button {
+        padding: 7px 18px;
+        font-size: 1rem;
+        border-radius: 10px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        background: linear-gradient(90deg, #ffb347, #ff9800);
+        color: #fff;
+        margin-left: 8px;
+        transition: background 0.2s;
+    }
+    .friend-table button:hover {
+        background: linear-gradient(90deg, #ff9800, #ffb347);
+    }
+    .friend-table form {
+        display: inline;
+    }
+    .shared-status {
+        font-weight: bold;
+        color: #43a047;
+        margin-right: 8px;
+    }
+    .not-shared-status {
+        font-weight: bold;
+        color: #e65100;
+        margin-right: 8px;
+    }

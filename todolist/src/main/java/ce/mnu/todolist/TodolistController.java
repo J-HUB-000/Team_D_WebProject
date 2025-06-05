@@ -441,7 +441,13 @@ public class TodolistController {
         User me = (User) session.getAttribute("loginUser");
         if (me == null) return "redirect:/todo/login";
         friendRequestService.sendRequest(me.getName(), toUser);
-        return "redirect:/todo/social";
+        return "redirect:/todo/request_success";
+    }
+    // 친구 요청 전송 성공 시
+    @GetMapping("/request_success")
+    public String requestSuccess(Model model) {
+    	model.addAttribute("message", "요청이 전송 되었습니다.");
+    	return "request_success";
     }
     // 친구 요청 수락
     @GetMapping("/accept_friend_request")

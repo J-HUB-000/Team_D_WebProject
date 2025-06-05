@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>사용자 등록 완료</title>
-    <style>
-    body {
+@charset "UTF-8";
+body {
         background: linear-gradient(120deg, orange 0%, yellow 100%);
         height: 100%;
         min-height: 100vh;
@@ -45,13 +40,3 @@
     .result-container button:hover {
         background: linear-gradient(90deg, #ff9800, #ffb347);
     }
-    </style>
-</head>
-<body>
-<div class="result-container">
-    <h3>사용자 등록 완료</h3>
-    <p th:text="|${userDTO.name}님, 등록이 완료되었습니다.|"></p>
-    <button onclick="location.href='/todo/homepage'">홈으로 돌아가기</button>
-</div>
-</body>
-</html>
