@@ -22,22 +22,6 @@
         font-weight: bold;
         letter-spacing: 1px;
     }
-    .main-container button[type="button"] {
-        width: 100%;
-        padding: 12px 0;
-        background: #D5CBBE;
-        color: #333333;
-        border: none;
-        border-radius: 8px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 10px;
-        transition: background 0.2s;
-    }
-    .main-container button[type="button"]:hover {
-        background: orange;
-    }
     /* 테이블 스타일 */
     .friend-table {
         width: 100%;

@@ -3,138 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>친구 초대</title>
-    <style>
-    body {
-        background: linear-gradient(120deg, orange 0%, yellow 100%);
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-    }
-    /* 상단 버튼 바 */
-    .top-btn-bar {
-        width: 100%;
-        background: white;
-        box-shadow: 0 0px 5px;
-        padding: 18px 0 10px 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 100;
-    }
-    .top-btn-bar .logo {
-        margin-left: 50px;
-        font-size: 2rem;
-        color: darkorange;
-        font-weight: bold;
-        letter-spacing: 2px;
-        text-decoration: none;
-    }
-    .top-btn-bar .btn-group {
-        display: flex;
-        align-items: center;
-        margin-right: 32px;
-    }
-    .top-btn-bar button {
-        margin: 0 10px;
-        padding: 10px 28px;
-        background: linear-gradient(90deg, #ffb347, #ff9800);
-        color: #fff;
-        border: none;
-        border-radius: 15px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 5px 5px rgba(0,0,0,0.04);
-        transition: background 0.2s;
-    }
-    .top-btn-bar button:hover {
-        background: linear-gradient(90deg, #ff9800, #ffb347);
-    }
-    .top-btn-bar button.login {
-        background: linear-gradient(90deg, #6ec1e4, #4286f4);
-    }
-    .top-btn-bar button.login:hover {
-        background: linear-gradient(90deg, #4286f4, #6ec1e4);
-    }
-    .top-btn-bar button.logout {
-        background: linear-gradient(90deg, #ff7e7e, #ff4e50);
-    }
-    .top-btn-bar button.logout:hover {
-        background: linear-gradient(90deg, #ff4e50, #ff7e7e);
-    }
-    /* 메인 컨테이너 */
-    .main-container {
-        background: #fff;
-        max-width: 900px;
-        margin: 120px auto 0 auto;
-        padding: 36px 32px 80px 32px;
-        border-radius: 10px;
-        box-shadow: 0 0px 0px, 0 0px 5px;
-        text-align: center;
-    }
-    .main-container h3 {
-        margin-top: 0;
-        font-size: 2rem;
-        color: #ff9800;
-        font-weight: bold;
-        letter-spacing: 1px;
-    }
-    /* 테이블 스타일 */
-    .friend-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 36px;
-        background: #fafafa;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-    }
-    .friend-table th, .friend-table td {
-        padding: 18px 12px;
-        border-bottom: 1px solid #eee;
-        font-size: 1.1rem;
-    }
-    .friend-table th {
-        background: #ffe0b2;
-        color: #ff9800;
-        font-weight: bold;
-        border-bottom: 2px solid #ffb347;
-    }
-    .friend-table tr:last-child td {
-        border-bottom: none;
-    }
-    .friend-table button {
-        padding: 7px 18px;
-        font-size: 1rem;
-        border-radius: 10px;
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        background: linear-gradient(90deg, #ffb347, #ff9800);
-        color: #fff;
-        margin-left: 8px;
-        transition: background 0.2s;
-    }
-    .friend-table button:hover {
-        background: linear-gradient(90deg, #ff9800, #ffb347);
-    }
-    .friend-table form {
-        display: inline;
-    }
-    .shared-status {
-        font-weight: bold;
-        color: #43a047;
-        margin-right: 8px;
-    }
-    .not-shared-status {
-        font-weight: bold;
-        color: #e65100;
-        margin-right: 8px;
-    }
-    </style>
+    <link rel="stylesheet" href="/topbtn.css">
+    <link rel="stylesheet" href="/invite.css">
     <script>
         function requireLogin() {
             alert("로그인이 필요한 서비스입니다.");
@@ -142,60 +12,58 @@
     </script>
 </head>
 <body>
-<!-- 상단 버튼 바 -->
-<div class="top-btn-bar">
-    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
-    <div class="btn-group">
-        <button th:if="${session.loginUser == null}"
-                onclick="location.href='/todo/login'"
-                class="login">로그인</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/userinfo'">내 정보</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/my_todo'">내 일정</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="requireLogin()">내 일정</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/share_room'">공유 일정</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="requireLogin()">공유 일정</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/social'">소셜</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="requireLogin()">소셜</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/logout'"
-                class="logout">로그아웃</button>
-    </div>
-</div>
-<!-- 메인 컨테이너 -->
-<div class="main-container">
-    <h3>친구 초대</h3>
-    <table class="friend-table">
-        <tr>
-            <th>친구 목록</th>
-            <th>공유 현황</th>
-        </tr>
-        <tr th:each="friend : ${friends}">
-            <td th:text="${friend.friendname}"></td>
-            <td>
-                <th:block th:if="${sharedMap[friend.friendname]}">
-                    <span class="shared-status">공유됨</span>
-                    <form th:action="@{/todo/invite_delete}" method="post">
-                        <input type="hidden" name="friendname" th:value="${friend.friendname}">
-                        <button type="submit">공유 해제</button>
-                    </form>
-                </th:block>
-                <th:block th:unless="${sharedMap[friend.friendname]}">
-                    <span class="not-shared-status">공유되지 않음</span>
-                    <form th:action="@{/todo/invite}" method="post">
-                        <input type="hidden" name="friendname" th:value="${friend.friendname}">
-                        <button type="submit">공유하기</button>
-                    </form>
-                </th:block>
-            </td>
-        </tr>
-    </table>
-</div>
+	<!-- 상단 버튼 바 -->
+	<div class="top-btn-bar">
+	    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
+	    <div class="btn-group">
+	        <button th:if="${session.loginUser == null}"
+	                onclick="location.href='/todo/login'">로그인</button>
+	        <button th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/userinfo'">내 정보</button>
+	        <button th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/my_todo'">내 일정</button>
+	        <button th:if="${session.loginUser == null}"
+	                onclick="requireLogin()">내 일정</button>
+	        <button th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/share_room'">공유 일정</button>
+	        <button th:if="${session.loginUser == null}"
+	                onclick="requireLogin()">공유 일정</button>
+	        <button th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/social'">소셜</button>
+	        <button th:if="${session.loginUser == null}"
+	    	        onclick="requireLogin()">소셜</button>
+			<button class="logoutbtn" th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/logout'">로그아웃</button>
+	    </div>
+	</div>
+	<!-- 메인 컨테이너 -->
+	<div class="main-container">
+	    <h3>친구 초대</h3>
+	    <table class="friend-table">
+	        <tr>
+	            <th>친구 목록</th>
+	            <th>공유 현황</th>
+	        </tr>
+	        <tr th:each="friend : ${friends}">
+	            <td th:text="${friend.friendname}"></td>
+	            <td>
+	                <th:block th:if="${sharedMap[friend.friendname]}">
+	                    <span class="shared-status">공유됨</span>
+	                    <form th:action="@{/todo/invite_delete}" method="post">
+	                        <input type="hidden" name="friendname" th:value="${friend.friendname}">
+	                        <button type="submit">공유 해제</button>
+	                    </form>
+	                </th:block>
+	                <th:block th:unless="${sharedMap[friend.friendname]}">
+	                    <span class="not-shared-status">공유되지 않음</span>
+	                    <form th:action="@{/todo/invite}" method="post">
+	                        <input type="hidden" name="friendname" th:value="${friend.friendname}">
+	                        <button type="submit">공유하기</button>
+	                    </form>
+	                </th:block>
+	            </td>
+	        </tr>
+	    </table>
+	</div>
 </body>
 </html>

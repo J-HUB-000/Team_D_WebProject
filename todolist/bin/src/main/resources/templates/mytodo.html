@@ -1,313 +1,163 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>내 일정 관리</title>
-<style>
-body {
-    background: linear-gradient(120deg, orange 0%, yellow 100%);
-    height: 100%;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-}
-/* 상단 버튼 바 */
-.top-btn-bar {
-    width: 100%;
-    background: white;
-    box-shadow: 0 0px 5px;
-    padding: 18px 0 10px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
-}
-.top-btn-bar .logo {
-    margin-left: 50px;
-    font-size: 2rem;
-    color: darkorange;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-decoration: none;
-}
-.top-btn-bar .btn-group {
-    display: flex;
-    align-items: center;
-    margin-right: 32px;
-}
-.top-btn-bar button {
-    margin: 0 10px;
-    padding: 10px 28px;
-    background: linear-gradient(90deg, #ffb347, #ff9800);
-    color: #fff;
-    border: none;
-    border-radius: 15px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-.top-btn-bar button:hover {
-    background: linear-gradient(90deg, #ff9800, #ffb347);
-}
-/* 메인 flex 컨테이너 */
-.flex-main {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 40px;
-    max-width: 1200px;
-    margin: 120px auto 0 auto; /* 상단바 높이만큼 아래로 */
-    padding: 0 20px 40px 20px;
-}
-/* 달력 컨테이너 */
-.calendar-container {
-	min-width: 700px;
-	min-height: 700px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 0px 0px, 0 0px 5px;
-    text-align: center;
-    padding: 32px 24px 24px 24px;
-}
-.calendar-container h3 {
-    color: darkorange;
-    letter-spacing: 2px;
-    margin-bottom: 24px;
-}
-.calendar {
-    width: 100%;
-    margin: 0 auto auto auto;
-}
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.calendar-header button {
-    background: #eee;
-    border: none;
-    padding: 4px 14px;
-    cursor: pointer;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-    color: #ff9800;
-    transition: background 0.2s, color 0.2s;
-}
-.calendar-header button:hover {
-    background: #ffd699;
-    color: #fff;
-}
-.calendar-table {
-    width: 100%;
-    height: 100%;
-    border-collapse: collapse;
-}
-.calendar-table th, .calendar-table td {
-    width: 14%;
-    height: 70px;
-    text-align: center;
-    border: 1px solid #ffd699;
-    font-size: 16px;
-}
-.calendar-table th {
-    background: #fff6e0;
-    color: #ff9800;
-}
-.calendar-table td button {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-.calendar-table td.today {
-    background: #ffe0b2;
-}
-.calendar-table td.selected button {
-    background: #90caf9;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-}
-/* iframe 컨테이너 */
-.iframe-container {
-    background: #fff;
-    flex: 1 1 0;
-    min-width: 1050px;
-    min-height: 700px;
-    border-radius: 20px;
-    box-shadow: 0 0px 0px, 0 0px 5px;
-    padding: 32px 24px 24px 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    height: 520px;
-}
-.iframe-container h3 {
-    color: darkorange;
-    letter-spacing: 2px;
-    margin-bottom: 18px;
-}
-.iframe-container iframe {
-    width: 100%;
-    height: 400px;
-    border: none;
-    border-radius: 12px;
-    background: #fafafa;
-    margin-bottom: 20px;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>내 일정 관리</title>
+    <link rel="stylesheet" href="/mytodo.css">
+    <link rel="stylesheet" href="/topbtn.css">
+    <script>
+        function requireLogin() {
+            alert("로그인이 필요한 서비스입니다.");
+        }
+    </script>
 </head>
 <body>
-<!-- 상단 버튼 바 -->
-<div class="top-btn-bar">
-    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
-    <div class="btn-group">
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/logout'">로그아웃</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="location.href='/todo/login'">로그인</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/userinfo'">정보보기</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/my_todo'">내 일정</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="alert('로그인을 먼저 해주세요.')">내 일정</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/share_room'">공유 일정</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="alert('로그인을 먼저 해주세요.')">공유 일정</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/social'">소셜</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="alert('로그인을 먼저 해주세요.')">소셜</button>
-    </div>
-</div>
-
-<div class="flex-main">
-    <!-- 달력 컨테이너 -->
-    <div class="calendar-container">
-        <h3>내 일정 관리</h3>
-        <form id="dateForm" method="get" action="/todo/selected_date" style="display:none;">
-            <input type="date" id="selectedDate" name="selectedDate" />
-        </form>
-        <div class="calendar">
-            <div class="calendar-header">
-                <button id="prev">&lt;</button>
-                <span class="year-month"></span>
-                <button id="next">&gt;</button>
-            </div>
-            <table class="calendar-table">
-                <thead>
-                <tr>
-                    <th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th>
-                </tr>
-                </thead>
-                <tbody id="calendar-body">
-                <!-- 날짜가 여기에 동적으로 들어감 -->
-                </tbody>
-            </table>
+    <!-- 상단 버튼 바 -->
+    <div class="top-btn-bar">
+        <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
+        <div class="btn-group">
+            <button th:if="${session.loginUser == null}"
+                    onclick="location.href='/todo/login'">로그인</button>
+            <button th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/userinfo'">내 정보</button>
+            <button th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/my_todo'">내 일정</button>
+            <button th:if="${session.loginUser == null}"
+                    onclick="requireLogin()">내 일정</button>
+            <button th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/share_room'">공유 일정</button>
+            <button th:if="${session.loginUser == null}"
+                    onclick="requireLogin()">공유 일정</button>
+            <button th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/social'">소셜</button>
+            <button th:if="${session.loginUser == null}"
+                    onclick="requireLogin()">소셜</button>
+            <button class="logoutbtn" th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/logout'">로그아웃</button>
         </div>
     </div>
-    <!-- iframe 컨테이너 -->
-    <div class="iframe-container" style="width: 900px; height: 600px;">
-        <h3>선택한 날짜 일정</h3>
-        <div id="selected-date-text" style="font-size:18px; color:#ff9800; margin-bottom:10px;"></div>
-        <iframe name="selectedDateFrame" style="width:100%; height:100%;"></iframe>
+    
+    <div class="flex-main">
+        <!-- 달력 컨테이너 -->
+        <div class="calendar-container">
+            <h3>Calendar (달력)</h3>
+            <form id="dateForm" method="get" action="/todo/selected_date" style="display:none;">
+                <input type="date" id="selectedDate" name="selectedDate" />
+            </form>
+            <div class="calendar">
+                <div class="calendar-header">
+                    <button id="prev">&lt;</button>
+                    <span class="year-month"></span>
+                    <button id="next">&gt;</button>
+                </div>
+                <table class="calendar-table">
+                    <thead>
+                        <tr>
+                            <th>일</th>
+                            <th>월</th>
+                            <th>화</th>
+                            <th>수</th>
+                            <th>목</th>
+                            <th>금</th>
+                            <th>토</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendar-body">
+                        <!-- 날짜가 여기에 동적으로 들어감 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- iframe 컨테이너 -->
+        <div class="iframe-container" style="width: 900px; height: 600px;">
+            <h3>Note (메모)</h3>
+            <iframe name="selectedDateFrame" style="width:100%; height:100%;"></iframe>
+        </div>
     </div>
-</div>
+    
+    <script>
+        // 오늘 날짜 정보
+        let today = new Date();
+        let currentYear = today.getFullYear();
+        let currentMonth = today.getMonth(); // 0~11
+        let selectedDateStr = null; // 선택된 날짜를 저장
 
-<script>
-    // 오늘 날짜 정보
-    let today = new Date();
-    let currentYear = today.getFullYear();
-    let currentMonth = today.getMonth(); // 0~11
-    let selectedDateStr = null; // 선택된 날짜를 저장
+        function createCalendar(year, month) {
+            const yearMonth = document.querySelector('.year-month');
+            yearMonth.textContent = year + '년 ' + (month + 1) + '월';
 
-    function createCalendar(year, month) {
-      const yearMonth = document.querySelector('.year-month');
-      yearMonth.textContent = year + '년 ' + (month + 1) + '월';
+            const calendarBody = document.getElementById('calendar-body');
+            calendarBody.innerHTML = '';
 
-      const calendarBody = document.getElementById('calendar-body');
-      calendarBody.innerHTML = '';
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
 
-      const firstDay = new Date(year, month, 1).getDay();
-      const lastDate = new Date(year, month + 1, 0).getDate();
+            let row = document.createElement('tr');
+            // 빈칸 채우기
+            for (let i = 0; i < firstDay; i++) {
+                row.appendChild(document.createElement('td'));
+            }
 
-      let row = document.createElement('tr');
-      // 빈칸 채우기
-      for (let i = 0; i < firstDay; i++) {
-        row.appendChild(document.createElement('td'));
-      }
+            for (let date = 1; date <= lastDate; date++) {
+                if ((firstDay + date - 1) % 7 === 0 && date !== 1) {
+                    calendarBody.appendChild(row);
+                    row = document.createElement('tr');
+                }
+                const cell = document.createElement('td');
+                const btn = document.createElement('button');
+                btn.textContent = date;
+                // yyyy-MM-dd 형식 만들기
+                const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(date).padStart(2, '0');
+                btn.onclick = function() {
+                    selectDate(dateStr); // 페이지 전체 이동이 아니라 iframe만 갱신!
+                };
 
-      for (let date = 1; date <= lastDate; date++) {
-        if ((firstDay + date - 1) % 7 === 0 && date !== 1) {
-          calendarBody.appendChild(row);
-          row = document.createElement('tr');
-        }
-        const cell = document.createElement('td');
-        const btn = document.createElement('button');
-        btn.textContent = date;
-        // yyyy-MM-dd 형식 만들기
-        const dateStr = year + '-' + String(month + 1).padStart(2, '0') + '-' + String(date).padStart(2, '0');
-        btn.onclick = function() {
-              selectDate(dateStr); // 페이지 전체 이동이 아니라 iframe만 갱신!
-            };
-
-        // 오늘 날짜 강조
-        if (year === today.getFullYear() && month === today.getMonth() && date === today.getDate()) {
-          cell.className = 'today';
-        }
-     // 선택된 날짜 강조
-        if (selectedDateStr === dateStr) {
-          cell.classList.add('selected');
-        }
-        cell.appendChild(btn);
-        row.appendChild(cell);
-      }
-      // 남은 칸 채우기
-      while (row.children.length < 7) {
-        row.appendChild(document.createElement('td'));
-      }
-      calendarBody.appendChild(row);
-    }
-    function selectDate(dateStr) {
-          selectedDateStr = dateStr; // 선택된 날짜 저장
-          createCalendar(currentYear, currentMonth); // 캘린더 다시 그리기 (색상 반영)
-       // 날짜를 iframe-container에 표시
-          document.getElementById('selected-date-text').textContent = dateStr;
-          // iframe의 src만 변경해서 해당 날짜의 일정 페이지를 로드
-          document.getElementsByName('selectedDateFrame')[0].src = '/todo/selected_date?selectedDate=' + dateStr;
+                // 오늘 날짜 강조
+                if (year === today.getFullYear() && month === today.getMonth() && date === today.getDate()) {
+                    cell.className = 'today';
+                }
+                // 선택된 날짜 강조
+                if (selectedDateStr === dateStr) {
+                    cell.classList.add('selected');
+                }
+                cell.appendChild(btn);
+                row.appendChild(cell);
+            }
+            // 남은 칸 채우기
+            while (row.children.length < 7) {
+                row.appendChild(document.createElement('td'));
+            }
+            calendarBody.appendChild(row);
         }
 
-    // 이전 달로 이동
-    document.getElementById('prev').onclick = function() {
-      currentMonth--;
-      if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-      }
-      createCalendar(currentYear, currentMonth);
-    };
-    // 다음 달로 이동
-    document.getElementById('next').onclick = function() {
-      currentMonth++;
-      if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-      }
-      createCalendar(currentYear, currentMonth);
-    };
+        function selectDate(dateStr) {
+            selectedDateStr = dateStr; // 선택된 날짜 저장
+            createCalendar(currentYear, currentMonth); // 캘린더 다시 그리기 (색상 반영)
+            // iframe의 src만 변경해서 해당 날짜의 일정 페이지를 로드
+            document.getElementsByName('selectedDateFrame')[0].src = '/todo/selected_date?selectedDate=' + dateStr;
+        }
 
-    // 최초 렌더링
-    createCalendar(currentYear, currentMonth);
-</script>
+        // 이전 달로 이동
+        document.getElementById('prev').onclick = function() {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            createCalendar(currentYear, currentMonth);
+        };
+        // 다음 달로 이동
+        document.getElementById('next').onclick = function() {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            createCalendar(currentYear, currentMonth);
+        };
+
+        // 최초 렌더링
+        createCalendar(currentYear, currentMonth);
+    </script>
 </body>
 </html>

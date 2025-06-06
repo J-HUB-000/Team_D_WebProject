@@ -38,36 +38,10 @@
 	</div>
 	<!-- 메인 컨테이너 -->
 	<div class="main-container">
-	    <h2>검색 결과</h2>
 	    <div th:if="${message}">
 	        <p class="message" th:text="${message}"></p>
 	    </div>
-	    <div th:if="${error}">
-	        <p class="error" th:text="${error}"></p>
-	    </div>
-	    <th:block th:if="${error} == null">
-	        <div th:if="${name}">
-	            <table>
-	                <thead>
-	                    <tr>
-	                        <th>사용자명</th>
-	                        <th>친구 요청</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                    <tr>
-	                        <td th:text="${name}"></td>
-	                        <td>
-	                            <form th:action="@{/todo/send_friend_request}" method="post" style="display:inline;">
-	                                <input type="hidden" name="toUser" th:value="${name}">
-	                                <button type="submit">친구 요청</button>
-	                            </form>
-	                        </td>
-	                    </tr>
-	                </tbody>
-	            </table>
-	        </div>
-	    </th:block>
+	
 	    <button onclick="location.href='/todo/social'">친구 목록으로</button>
 	    <button onclick="location.href='/todo/search_user'">다시 검색</button>
 	</div>

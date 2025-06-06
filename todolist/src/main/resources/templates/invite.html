@@ -64,6 +64,10 @@
 	            </td>
 	        </tr>
 	    </table>
+	    <button type="button"
+        th:onclick="|location.href='@{/todo/share_todo(roomid=${session_roomid})}'|">
+        방으로 돌아가기
+        </button>
 	</div>
 </body>
 </html>

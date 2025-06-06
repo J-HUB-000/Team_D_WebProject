@@ -1,0 +1,84 @@
+@charset "UTF-8";
+    body {
+        background: linear-gradient(120deg, #F4EEDF 50%,  #D6C8B0 50%);
+        height: 100%;
+        min-height: 100vh;
+    }
+    .signup-container {
+        background: #fff;
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 36px 32px 28px 32px;
+        border-radius: 40px;
+        box-shadow: 0 0px 0px, 0 0px 5px;
+        text-align: center;
+    }
+    .signup-container h1 {
+        color: darkorange;
+        letter-spacing: 3px;
+        margin-bottom: 24px;
+    }
+    .signup-container label {
+        display: block;
+        text-align: left;
+        margin-bottom: 10px;
+        color: black;
+        font-weight: bold;
+    }
+    .signup-container input[type="text"],
+    .signup-container input[type="email"],
+    .signup-container input[type="password"] {
+        width: 100%;
+        padding: 10px 0px;
+        margin-bottom: 18px;
+        border: 1px solid lightgrey;
+        border-radius: 10px;
+        font-size: 20px;
+        transition: border-color 0.2s;
+    }
+    .signup-container input:focus {
+        border-color: orange;
+        outline: none;
+    }
+    .signup-container .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .signup-container input[type="submit"],
+    .signup-container input[type="reset"] {
+        flex: 1;
+        padding: 10px 0;
+        background: orange;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .signup-container input[type="submit"]:hover,
+    .signup-container input[type="reset"]:hover {
+        background: #c97e1b;
+    }
+    .signup-container .extra-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .signup-container .extra-buttons button {
+        flex: 1;
+        padding: 8px 0;
+        background: #eee;
+        border: none;
+        border-radius: 6px;
+        color: #444;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .signup-container .extra-buttons button:hover {
+        background: #ffd699;
+        color: #ff9800;
+    }

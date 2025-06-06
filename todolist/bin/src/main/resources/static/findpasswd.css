@@ -1,0 +1,132 @@
+@charset "UTF-8";
+	body {
+    	background: linear-gradient(120deg, #F4EEDF 50%,  #D6C8B0 50%);
+        height: 100%;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+    .login-container {
+        background: #fff;
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 36px 32px 28px 32px;
+        border-radius: 40px;
+        box-shadow: 0 0px 0px, 0 0px 5px;
+        text-align: center;
+    }
+    .login-container h1 {
+        color: darkorange;
+        letter-spacing: 3px;
+        margin-bottom: 28px;
+    }
+    .login-container label {
+        display: block;
+        text-align: left;
+        margin-bottom: 10px;
+        color: black;
+        font-weight: bold;
+    }
+    .login-container input[type="email"] {
+        width: 100%;
+        padding: 10px 0px;
+        margin-bottom: 18px;
+        border: 1px solid lightgrey;
+        border-radius: 10px;
+        font-size: 20px;
+        transition: border-color 0.2s;
+    }
+    .login-container input:focus {
+        border-color: orange;
+        outline: none;
+    }
+    .login-container button[type="submit"] {
+        width: 100%;
+        padding: 10px 0;
+        background: linear-gradient(90deg, #ffb347, #ff9800);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: background 0.2s;
+    }
+    .login-container button[type="submit"]:hover {
+        background: orange;
+    }
+    .login-container .extra-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    .login-container .extra-buttons button {
+        flex: 1;
+        padding: 8px 0;
+        background: #eee;
+        border: none;
+        border-radius: 6px;
+        color: #444;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .login-container .extra-buttons button:hover {
+        background: #ffd699;
+        color: #ff9800;
+    }
+    .result-container {
+    background: #fff;
+    max-width: 500px;
+    margin: 60px auto 0 auto;
+    padding: 36px 32px 28px 32px;
+    border-radius: 40px;
+    box-shadow: 0 0px 0px, 0 0px 5px;
+    text-align: center;
+	}
+	.result-container h1 {
+	    color: darkorange;
+	    letter-spacing: 3px;
+	    margin-bottom: 28px;
+	}
+	.result-container p {
+	    font-size: 18px;
+	    margin: 18px 0;
+	}
+	.result-container .error-message {
+	    color: #e53935;
+	    font-size: 16px;
+	    margin: 18px 0;
+	}
+	.result-container button {
+	    width: 100%;
+	    padding: 10px 0;
+	    background: linear-gradient(90deg, #ffb347, #ff9800);
+	    color: #fff;
+	    border: none;
+	    border-radius: 6px;
+	    font-size: 18px;
+	    font-weight: bold;
+	    cursor: pointer;
+	    margin-top: 18px;
+	    transition: background 0.2s;
+	}
+	.result-container button:hover {
+	    background: linear-gradient(90deg, #ff9800, #ffb347);
+	}
+	.result-container button[type="button"] {
+	        flex: 1;
+	        padding: 8px 0;
+	        background: #eee;
+	        border: none;
+	        border-radius: 6px;
+	        color: #444;
+	        font-size: 15px;
+	        cursor: pointer;
+	        transition: background 0.2s;
+	}
+	.result-container button[type="button"]:hover {
+	    background: #ffd699;
+	        color: #ff9800;
+	}
