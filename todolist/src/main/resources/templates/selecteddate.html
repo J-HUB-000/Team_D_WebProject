@@ -1,59 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>선택된 날짜의 일정</title>
-<link rel="stylesheet" href="/select_date_my.css">
+    <meta charset="UTF-8">
+    <title>선택된 날짜의 일정</title>
+    <link rel="stylesheet" href="/select_date_my.css">
 </head>
 <body>
-<!-- 로그인 상태가 아니라면, -->
-<div th:if = "${error}" >
-<p th:text="${error}" style="color:red;"></p>
-<button type="button" onclick="parent.location.href='/todo/login'">로그인</button>
-</div>
+    <!-- 로그인 상태가 아니라면, -->
+    <div th:if="${error}">
+        <p th:text="${error}" style="color:red;"></p>
+        <button type="button" onclick="parent.location.href='/todo/login'">로그인</button>
+    </div>
 
-<!-- 로그인된 상태면, 정상 처리 -->
-<div th:unless = "${error}">
-<div class="selected-date" th:text="${selectedDate}"></div>
-<!-- 일정 추가 폼: 상단에 고정 -->
-<form class="add-form-top" action="/todo/add_todo" method="post"
-      style="position:sticky; top:0; z-index:10; padding-top:16px; padding-bottom:10px; margin-bottom:18px; max-width:600px; margin-left:auto; margin-right:auto;">
-    <input type="hidden" name="selectedDate" th:value="${selectedDate}"/>
-    <input type="text" name="todo" placeholder="일정을 입력하세요" required/>
-    <button type="submit">등록</button>
-</form>
-<div class="no-todo" th:if="${#lists.isEmpty(todos)}">
-등록된 일정이 없습니다.
-</div>
-
-
-<div class="postit-board">
-    <div class="postit" th:each="todo : ${todos}">
-        <div class="postit-content">
-            <!-- 수정 중인 일정이면 입력 폼, 아니면 텍스트만 -->
-            <span th:if="${editId} != ${todo.id}" th:text="${todo.todo}"></span>
-            <form th:if="${editId} == ${todo.id}" th:action="@{/todo/edit_todo}" method="post" style="display:inline;">
-                <input type="hidden" name="id" th:value="${todo.id}" />
-                <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
-                <input type="text" name="todo" th:value="${todo.todo}" required style="width: 70%;"/>
-                <button type="submit">확인</button>
-            </form>
+    <!-- 로그인된 상태면, 정상 처리 -->
+    <div th:unless="${error}">
+        <div class="selected-date" th:text="${selectedDate}"></div>
+        
+        <!-- 일정 추가 폼: 상단에 고정 -->
+        <form class="add-form-top" action="/todo/add_todo" method="post"
+              style="position:sticky; top:0; z-index:10; padding-top:16px; padding-bottom:10px; margin-bottom:18px; max-width:600px; margin-left:auto; margin-right:auto;">
+            <input type="hidden" name="selectedDate" th:value="${selectedDate}"/>
+            <input type="text" name="todo" placeholder="일정을 입력하세요" required/>
+            <button type="submit">등록</button>
+        </form>
+        
+        <div class="no-todo" th:if="${#lists.isEmpty(todos)}">
+            등록된 일정이 없습니다.
         </div>
-        <div class="postit-actions">
-            <!-- 수정 중이 아닐 때만 수정 버튼 표시 -->
-            <form th:if="${editId} != ${todo.id}" th:action="@{/todo/edit_todo_form}" method="get" style="display:inline;">
-                <input type="hidden" name="id" th:value="${todo.id}" />
-                <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
-                <button type="submit">수정</button>
-            </form>
-            <form th:action="@{/todo/delete_todo}" method="post" style="display:inline;">
-                <input type="hidden" name="id" th:value="${todo.id}" />
-                <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
-                <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
-            </form>
+
+        <div class="postit-board">
+            <div class="postit" th:each="todo : ${todos}">
+                <div class="postit-content">
+                    <!-- 수정 중인 일정이면 입력 폼, 아니면 텍스트만 -->
+                    <span th:if="${editId} != ${todo.id}" th:text="${todo.todo}"></span>
+                    <form th:if="${editId} == ${todo.id}" th:action="@{/todo/edit_todo}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${todo.id}" />
+                        <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
+                        <input type="text" name="todo" th:value="${todo.todo}" required style="width: 70%;"/>
+                        <button type="submit">확인</button>
+                    </form>
+                </div>
+                <div class="postit-actions">
+                    <!-- 수정 중이 아닐 때만 수정 버튼 표시 -->
+                    <form th:if="${editId} != ${todo.id}" th:action="@{/todo/edit_todo_form}" method="get" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${todo.id}" />
+                        <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
+                        <button type="submit">수정</button>
+                    </form>
+                    <form th:action="@{/todo/delete_todo}" method="post" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${todo.id}" />
+                        <input type="hidden" name="selectedDate" th:value="${selectedDate}" />
+                        <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
 </body>
 </html>

@@ -1,70 +1,75 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>검색 결과</title>
-    <link rel="stylesheet" href="/search_result.css">
-    <link rel="stylesheet" href="/topbtn.css">
-</head>
-<body>
-<!-- 상단 버튼 바 -->
-<div class="top-btn-bar">
-    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
-    <div class="btn-group">
-        <button class="loginbtn" th:if="${session.loginUser == null}"
-                onclick="location.href='/todo/login'">로그인</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/userinfo'">내 정보</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/my_todo'">내 일정</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="requireLogin()">내 일정</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/share_room'">공유 일정</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="requireLogin()">공유 일정</button>
-        <button class="socialbtn" th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/social'">소셜</button>
-        <button class="socialbtn" th:if="${session.loginUser == null}"
-    	        onclick="requireLogin()">소셜</button>
-		<button class="logoutbtn" th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/logout'">로그아웃</button>
-    </div>
-</div>
-<!-- 메인 컨테이너 -->
-<div class="main-container">
-    <h2>검색 결과</h2>
-    <div th:if="${message}">
-        <p class="message" th:text="${message}"></p>
-    </div>
-    <div th:if="${error}">
-        <p class="error" th:text="${error}"></p>
-    </div>
-    <th:block th:if="${error} == null">
-        <div th:if="${name}">
-            <table>
-                <thead>
-                    <tr>
-                        <th>사용자명</th>
-                        <th>친구 요청</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td th:text="${name}"></td>
-                        <td>
-                            <form th:action="@{/todo/send_friend_request}" method="post" style="display:inline;">
-                                <input type="hidden" name="toUser" th:value="${name}">
-                                <button type="submit">친구 요청</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </th:block>
-    <button onclick="location.href='/todo/social'">친구 목록으로</button>
-    <button onclick="location.href='/todo/search_user'">다시 검색</button>
-</div>
-</body>
+	<head>
+	    <meta charset="UTF-8">
+	    <title>검색 결과</title>
+	    <link rel="stylesheet" href="/search_result.css">
+	    <link rel="stylesheet" href="/topbtn.css">
+	    <script>
+		    function requireLogin() {
+		    	alert("로그인이 필요한 서비스입니다.");
+		    }
+	    </script>
+	</head>
+	<body>
+		<!-- 상단 버튼 바 -->
+		<div class="top-btn-bar">
+		    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
+		    <div class="btn-group">
+		        <button class="loginbtn" th:if="${session.loginUser == null}"
+		                onclick="location.href='/todo/login'">로그인</button>
+		        <button th:if="${session.loginUser != null}"
+		                onclick="location.href='/todo/userinfo'">내 정보</button>
+		        <button th:if="${session.loginUser != null}"
+		                onclick="location.href='/todo/my_todo'">내 일정</button>
+		        <button th:if="${session.loginUser == null}"
+		                onclick="requireLogin()">내 일정</button>
+		        <button th:if="${session.loginUser != null}"
+		                onclick="location.href='/todo/share_room'">공유 일정</button>
+		        <button th:if="${session.loginUser == null}"
+		                onclick="requireLogin()">공유 일정</button>
+		        <button class="socialbtn" th:if="${session.loginUser != null}"
+		                onclick="location.href='/todo/social'">소셜</button>
+		        <button class="socialbtn" th:if="${session.loginUser == null}"
+		    	        onclick="requireLogin()">소셜</button>
+				<button class="logoutbtn" th:if="${session.loginUser != null}"
+		                onclick="location.href='/todo/logout'">로그아웃</button>
+		    </div>
+		</div>
+		<!-- 메인 컨테이너 -->
+		<div class="main-container">
+		    <h2>검색 결과</h2>
+		    <div th:if="${message}">
+		        <p class="message" th:text="${message}"></p>
+		    </div>
+		    <div th:if="${error}">
+		        <p class="error" th:text="${error}"></p>
+		    </div>
+		    <th:block th:if="${error} == null">
+		        <div th:if="${name}">
+		            <table>
+		                <thead>
+		                    <tr>
+		                        <th>사용자명</th>
+		                        <th>친구 요청</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    <tr>
+		                        <td th:text="${name}"></td>
+		                        <td>
+		                            <form th:action="@{/todo/send_friend_request}" method="post" style="display:inline;">
+		                                <input type="hidden" name="toUser" th:value="${name}">
+		                                <button type="submit">친구 요청</button>
+		                            </form>
+		                        </td>
+		                    </tr>
+		                </tbody>
+		            </table>
+		        </div>
+		    </th:block>
+		    <button onclick="location.href='/todo/social'">친구 목록으로</button>
+		    <button onclick="location.href='/todo/search_user'">다시 검색</button>
+		</div>
+	</body>
 </html>

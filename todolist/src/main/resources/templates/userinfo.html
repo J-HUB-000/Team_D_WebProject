@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="/userinfo.css">
 </head>
 <body>
-<div class="info-container">
-    <h2>내 정보</h2>
-    <table class="info-table">
-        <tr><th>이름</th><td th:text="${user.name}"></td></tr>
-        <tr><th>이메일</th><td th:text="${user.email}"></td></tr>
-        <tr><th>전화번호</th><td th:text="${user.phone}"></td></tr>
-    </table>
-    <button onclick="location.href='/todo/homepage'">메인으로</button>
-</div>
+	<div class="info-container">
+	    <h2>내 정보</h2>
+	    <table class="info-table">
+	        <tr><th>이름</th><td th:text="${user.name}"></td></tr>
+	        <tr><th>이메일</th><td th:text="${user.email}"></td></tr>
+	        <tr><th>전화번호</th><td th:text="${user.phone}"></td></tr>
+	    </table>
+	    <button onclick="location.href='/todo/homepage'">메인으로</button>
+	</div>
 </body>
 </html>

@@ -80,14 +80,13 @@ public class TodolistController {
 	@PostMapping("/invite")
 	public String inviteDone(RoomDTO dto, HttpSession session, String friendname) {
 		Long roomid = (Long) session.getAttribute("roomid");
-		User user = userService.findByUserName(friendname);//친구 이름으로 User테이블의 행을 가져옴
-		String friendemail = user.getEmail(); //그 행의 이메일 값 = 친구이메일
+		User user = userService.findByUserName(friendname);		//친구 이름으로 User테이블의 행을 가져옴
+		String friendemail = user.getEmail(); 	//그 행의 이메일 값 = 친구이메일
   		userService.save(roomid, friendname, friendemail);
 		return "redirect:/todo/invite";
 	}
 	@PostMapping("/invite_delete")
 	public String inviteDelete(String friendname) {
-		System.out.print(friendname);
 		userService.deleteFriend(friendname); 
 		return "redirect:/todo/invite";
 	}
@@ -166,8 +165,6 @@ public class TodolistController {
 	    model.addAttribute("UserDTO", user); // 가입 완료 페이지에서 이름 출력하려면 필요
 	    return "signup_done";
 	}
-	
-	
 	//내 일정 관리
 	@GetMapping("/my_todo")
 	public String myTodo() {
@@ -192,7 +189,6 @@ public class TodolistController {
 	    model.addAttribute("selectedDate", selectedDate); // 날짜도 같이 전달
 	    return "selecteddate";
 	}
-	
 	//일정 등록
 	@PostMapping("/add_todo")
 	public String addTodo(String selectedDate, String todo, HttpSession session, Model model) {
@@ -216,7 +212,6 @@ public class TodolistController {
 	    // 삭제 후 해당 날짜 일정 페이지로 리다이렉트
 	    return "redirect:/todo/selected_date?selectedDate=" + selectedDate;
 	}
-	
 	//일정 수정
 	@GetMapping("/edit_todo_form")
 	public String editTodoForm(Long id, String selectedDate, HttpSession session, Model model) {
@@ -235,7 +230,6 @@ public class TodolistController {
 	    myTodoService.updateTodo(id, todo);
 	    return "redirect:/todo/selected_date?selectedDate=" + selectedDate;
 	}
-
     //공유 일정
     @GetMapping("/share_todo")
     public String ShareTodo(@RequestParam Long roomid, HttpSession session, Model model){
@@ -252,25 +246,24 @@ public class TodolistController {
   	    model.addAttribute("hostEmail", room.getEmail()); // 방 호스트 이메일 전달
   	    return "sharetodo";
     }
-  //공유 일정 조회
+    //공유 일정 조회
     @GetMapping("/selected_date_share")
     public String ShareTodoProcess(String selectedDate, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("loginUser");
+    	User user = (User) session.getAttribute("loginUser");
         Long roomid = (Long) session.getAttribute("roomid");
         if (user == null) {
         	model.addAttribute("error","로그인이 필요한 서비스입니다.");
         }
         List<ShareTodo> sharetodos = new ArrayList<>();
         if (selectedDate != null && !selectedDate.isEmpty() && roomid != null) {
-            // 날짜와 방ID으로 해당 방의 공유일정 전체 조회
-            sharetodos = shareTodoService.findByRoomidAndCallendardate(roomid, selectedDate);
+        	// 날짜와 방ID으로 해당 방의 공유일정 전체 조회
+        	sharetodos = shareTodoService.findByRoomidAndCallendardate(roomid, selectedDate);
         }
         model.addAttribute("sharetodos", sharetodos);
         model.addAttribute("selectedDate", selectedDate);
         model.addAttribute("roomid", roomid);
         return "selecteddate_share";
     }
-
     //공유 일정 등록
   	@PostMapping("/add_sharetodo")
   	public String addShareTodo(String selectedDate, String sharetodo, HttpSession session, Model model, RedirectAttributes res) {
@@ -282,13 +275,13 @@ public class TodolistController {
   	    String email = user.getEmail();
   	    String name = user.getName();
   	    shareTodoService.addShareTodo(roomid, email, name, selectedDate, sharetodo);
-  	  res.addAttribute("roomid", roomid);
-      res.addAttribute("email", email);
-      res.addAttribute("name", name);
-      res.addAttribute("selectedDate", selectedDate);
-      res.addAttribute("sharetodo", sharetodo);
-
-      return "redirect:/todo/selected_date_share";
+  	    res.addAttribute("roomid", roomid);
+  	    res.addAttribute("email", email);
+  	    res.addAttribute("name", name);
+  	    res.addAttribute("selectedDate", selectedDate);
+  	    res.addAttribute("sharetodo", sharetodo);
+  	    
+  	    return "redirect:/todo/selected_date_share";
   	}
     //공유방 목록
   	@GetMapping("/share_room")
@@ -298,28 +291,26 @@ public class TodolistController {
   	        return "redirect:/todo/login";
   	    }
   	    String email = user.getEmail();
-
   	    // 내가 소유한 방
   	    List<ShareRoom> rooms = userService.getRoomsByOwnerEmail(email);
   	    model.addAttribute("rooms", rooms);
   	    model.addAttribute("loginUserEmail", email);
-
+  	    
   	    // 내가 공유받은 방
   	    List<ShareFriends> shareFriends = userService.findByFriendEmail(email);
   	    List<Long> sharedRoomIds = shareFriends.stream()
   	        .map(ShareFriends::getRoomid)
   	        .distinct()
   	        .collect(Collectors.toList());
-
+  	    
   	    List<ShareRoom> sharedRooms = new ArrayList<>();
   	    for (Long roomid : sharedRoomIds) {
   	        sharedRooms.addAll(userService.getRoomsByRoomid(roomid));
   	    }
+  	    
   	    model.addAttribute("sharedRooms", sharedRooms);
-
   	    return "share_roomlist";
   	}
-
     //공유방 삭제
   	@PostMapping("/todo/delete_room")
   	public String deleteRoom(Long roomid, HttpSession session) {
@@ -336,22 +327,21 @@ public class TodolistController {
   	    return "redirect:/todo/share_room";
   	}
   	//공유방 만들기
-      @GetMapping("create_room")
-      public String CreateRoomForm(HttpSession session) {
-      	User user = (User) session.getAttribute("loginUser");
-      	if (user == null) {
-      	    return "redirect:/todo/login";   // 로그인 되지 않았으면 로그인 페이지로 리다이렉트
-      	}
+  	@GetMapping("create_room")
+    public String CreateRoomForm(HttpSession session) {
+    	User user = (User) session.getAttribute("loginUser");
+    	if (user == null) {
+    		return "redirect:/todo/login";   // 로그인 되지 않았으면 로그인 페이지로 리다이렉트
+    	}
       	return "createroom";
-      }
-      @PostMapping("create_room")
-      public String CreateRoom(RoomDTO room, HttpSession session, Model model) {
-      	User user = (User) session.getAttribute("loginUser");
-      	String email = user.getEmail();
-      	userService.save(room, email);    //DB에 저장
-      	return "redirect:/todo/share_room";
-      }
-      
+    }
+  	@PostMapping("create_room")
+  	public String CreateRoom(RoomDTO room, HttpSession session, Model model) {
+  		User user = (User) session.getAttribute("loginUser");
+  		String email = user.getEmail();
+  		userService.save(room, email);    //DB에 저장
+  		return "redirect:/todo/share_room";
+  	}
     //공유 일정 삭제
   	@PostMapping("/delete_sharetodo")
   	public String deleteShareTodo(Long id, String selectedDate) {
@@ -359,7 +349,6 @@ public class TodolistController {
   	    // 삭제 후 해당 날짜 일정 페이지로 리다이렉트
   	    return "redirect:/todo/selected_date_share?selectedDate=" + selectedDate;
   	}
-  	
   	//공유 일정 수정
   	@GetMapping("/edit_sharetodo_form")
   	public String editShareTodoForm(Long id, String selectedDate, HttpSession session, Model model) {
@@ -375,7 +364,6 @@ public class TodolistController {
   	    shareTodoService.updateShareTodo(id, sharetodo);
   	    return "redirect:/todo/selected_date_share?selectedDate=" + selectedDate;
   	}
-    
 	// 소셜(친구 목록)
     @GetMapping("/social")
     public String friendsList(Model model, HttpSession session) {
@@ -399,7 +387,6 @@ public class TodolistController {
         friendUserService.deleteFriend(me.getName(), friendname);
         return "redirect:/todo/social";
     }
-
     // 사용자 검색
     @GetMapping("/search_user")
     public String searchUser(HttpSession session) {
@@ -472,5 +459,4 @@ public class TodolistController {
         }
         return "redirect:/todo/social";
     }
-    
 }

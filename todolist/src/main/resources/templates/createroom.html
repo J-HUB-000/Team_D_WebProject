@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>방만들기 페이지</title>
+    <meta charset="UTF-8">
+    <title>방만들기 페이지</title>
+    <link rel="stylesheet" type="text/css" href="/createRoom.css" />
 </head>
 <body>
-<form th:action="@{/todo/create_room}" method="post">
-<h3>방 생성 페이지</h3>
-<p>방 이름:<input type="text" name="roomname" required/></p>
-<p>설명:<input type="text" name="roomexp"/></p>
-<p th:if="${error}" th:text="${error}" style="color:red;"></p>
-<p><input type="submit" value="방 만들기"></p>
-</form>
+    <div class="main-container">
+        <form th:action="@{/todo/create_room}" method="post">
+            <h3>방 생성 페이지</h3>
+            <p>방 이름 <input type="text" name="roomname" required/></p>
+            <p>설명 <input type="text" name="roomexp" required/></p>
+            <p><input type="submit" value="방 만들기"></p>
+        </form>
+    </div>
 </body>
 </html>

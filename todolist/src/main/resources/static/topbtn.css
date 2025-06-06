@@ -3,7 +3,7 @@
     .top-btn-bar {
         width: 100%;
         background: white;
-        box-shadow: 0 0px 5px;
+        box-shadow: 0 0px 0px;
         padding: 18px 0 10px 0;
         display: flex;
         justify-content: space-between; /* 왼쪽-오른쪽 정렬 */
@@ -15,7 +15,7 @@
     }
     .top-btn-bar .logo {
         margin-left: 50px;
-        font-size: 2rem;
+        font-size: 3rem;
         color: darkorange;
         font-weight: bold;
         letter-spacing: 2px;

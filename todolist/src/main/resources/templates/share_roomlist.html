@@ -1,92 +1,97 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>공유 방 목록페이지</title>
-<link rel="stylesheet" href="/share_room_list.css">
-<link rel="stylesheet" href="/topbtn.css">
+    <meta charset="UTF-8">
+    <title>공유 방 목록페이지</title>
+    <link rel="stylesheet" href="/share_room_list.css">
+    <link rel="stylesheet" href="/topbtn.css">
+    <script>
+        function requireLogin() {
+            alert("로그인이 필요한 서비스입니다.");
+        }
+    </script>
 </head>
 <body>
-<!-- 상단 버튼 바 -->
-<div class="top-btn-bar">
-    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
-    <div class="btn-group">
-        <button class="loginbtn" th:if="${session.loginUser == null}"
-                onclick="location.href='/todo/login'">로그인</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/userinfo'">내 정보</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/my_todo'">내 일정</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="requireLogin()">내 일정</button>
-        <button th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/share_room'">공유 일정</button>
-        <button th:if="${session.loginUser == null}"
-                onclick="requireLogin()">공유 일정</button>
-        <button class="socialbtn" th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/social'">소셜</button>
-        <button class="socialbtn" th:if="${session.loginUser == null}"
-    	        onclick="requireLogin()">소셜</button>
-		<button class="logoutbtn" th:if="${session.loginUser != null}"
-                onclick="location.href='/todo/logout'">로그아웃</button>
-    </div>
-</div>
-
-<!-- 방 목록 컨테이너 -->
-<div class="room-container">
-    <h3>내가 생성한 방</h3>
-    <table class="room-table">
-        <tr>
-            <th>id</th>
-            <th>호스트</th>
-            <th>방이름</th>
-            <th>설명</th>
-            <th>관리</th>
-        </tr>
-        <tr th:each="room : ${rooms}">
-            <td th:text="${room.roomid}"></td>
-            <td th:text="${room.email}"></td>
-            <td th:text="${room.roomname}"></td>
-            <td th:text="${room.roomexp}"></td>
-            <td>
-                <form th:if="${room.email} == ${loginUserEmail}"
-                      th:action="@{/todo/delete_room}" method="post" style="display:inline;">
-                    <input type="hidden" name="roomid" th:value="${room.roomid}" />
-                    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">방 삭제</button>
-                </form>
-                <button type="button"
-                        th:onclick="|location.href='@{/todo/share_todo(roomid=${room.roomid})}'|">
-                    입장하기
-                </button>
-            </td>
-        </tr>
-    </table>
-    <div class="action-btns">
-        <button onclick="location.href='/todo/create_room'">방 만들기</button>
+    <!-- 상단 버튼 바 -->
+    <div class="top-btn-bar">
+        <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
+        <div class="btn-group">
+            <button class="loginbtn" th:if="${session.loginUser == null}"
+                    onclick="location.href='/todo/login'">로그인</button>
+            <button th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/userinfo'">내 정보</button>
+            <button th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/my_todo'">내 일정</button>
+            <button th:if="${session.loginUser == null}"
+                    onclick="requireLogin()">내 일정</button>
+            <button th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/share_room'">공유 일정</button>
+            <button th:if="${session.loginUser == null}"
+                    onclick="requireLogin()">공유 일정</button>
+            <button class="socialbtn" th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/social'">소셜</button>
+            <button class="socialbtn" th:if="${session.loginUser == null}"
+                    onclick="requireLogin()">소셜</button>
+            <button class="logoutbtn" th:if="${session.loginUser != null}"
+                    onclick="location.href='/todo/logout'">로그아웃</button>
+        </div>
     </div>
 
-    <h3>친구가 공유한 방</h3>
-    <table class="room-table">
-        <tr>
-            <th>id</th>
-            <th>호스트</th>
-            <th>방이름</th>
-            <th>설명</th>
-            <th>입장</th>
-        </tr>
-        <tr th:each="sharedRoom : ${sharedRooms}">
-            <td th:text="${sharedRoom.roomid}"></td>
-            <td th:text="${sharedRoom.email}"></td>
-            <td th:text="${sharedRoom.roomname}"></td>
-            <td th:text="${sharedRoom.roomexp}"></td>
-            <td>
-                <button type="button"
-                        th:onclick="|location.href='@{/todo/share_todo(roomid=${sharedRoom.roomid})}'|">
-                    입장하기
-                </button>
-            </td>
-        </tr>
-    </table>
-</div>
+    <!-- 방 목록 컨테이너 -->
+    <div class="room-container">
+        <h3>내가 생성한 방</h3>
+        <table class="room-table">
+            <tr>
+                <th>id</th>
+                <th>호스트</th>
+                <th>방이름</th>
+                <th>설명</th>
+                <th>관리</th>
+            </tr>
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.roomid}"></td>
+                <td th:text="${room.email}"></td>
+                <td th:text="${room.roomname}"></td>
+                <td th:text="${room.roomexp}"></td>
+                <td>
+                    <form th:if="${room.email} == ${loginUserEmail}"
+                          th:action="@{/todo/delete_room}" method="post" style="display:inline;">
+                        <input type="hidden" name="roomid" th:value="${room.roomid}" />
+                        <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">방 삭제</button>
+                    </form>
+                    <button type="button"
+                            th:onclick="|location.href='@{/todo/share_todo(roomid=${room.roomid})}'|">
+                        입장하기
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <div class="action-btns">
+            <button onclick="location.href='/todo/create_room'">방 만들기</button>
+        </div>
+
+        <h3>친구가 공유한 방</h3>
+        <table class="room-table">
+            <tr>
+                <th>id</th>
+                <th>호스트</th>
+                <th>방이름</th>
+                <th>설명</th>
+                <th>입장</th>
+            </tr>
+            <tr th:each="sharedRoom : ${sharedRooms}">
+                <td th:text="${sharedRoom.roomid}"></td>
+                <td th:text="${sharedRoom.email}"></td>
+                <td th:text="${sharedRoom.roomname}"></td>
+                <td th:text="${sharedRoom.roomexp}"></td>
+                <td>
+                    <button type="button"
+                            th:onclick="|location.href='@{/todo/share_todo(roomid=${sharedRoom.roomid})}'|">
+                        입장하기
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
