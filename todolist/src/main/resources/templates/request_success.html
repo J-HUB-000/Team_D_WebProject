@@ -16,24 +16,24 @@
 	<div class="top-btn-bar">
 	    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
 	    <div class="btn-group">
-	        <button th:if="${session.loginUser != null}"
-	                onclick="location.href='/todo/logout'">로그아웃</button>
 	        <button th:if="${session.loginUser == null}"
 	                onclick="location.href='/todo/login'">로그인</button>
 	        <button th:if="${session.loginUser != null}"
-	                onclick="location.href='/todo/userinfo'">정보보기</button>
+	                onclick="location.href='/todo/userinfo'">내 정보</button>
 	        <button th:if="${session.loginUser != null}"
 	                onclick="location.href='/todo/my_todo'">내 일정</button>
 	        <button th:if="${session.loginUser == null}"
-	                onclick="alert('로그인을 먼저 해주세요.')">내 일정</button>
+	                onclick="requireLogin()">내 일정</button>
 	        <button th:if="${session.loginUser != null}"
 	                onclick="location.href='/todo/share_room'">공유 일정</button>
 	        <button th:if="${session.loginUser == null}"
-	                onclick="alert('로그인을 먼저 해주세요.')">공유 일정</button>
+	                onclick="requireLogin()">공유 일정</button>
 	        <button th:if="${session.loginUser != null}"
 	                onclick="location.href='/todo/social'">소셜</button>
 	        <button th:if="${session.loginUser == null}"
-	                onclick="alert('로그인을 먼저 해주세요.')">소셜</button>
+	    	        onclick="requireLogin()">소셜</button>
+			<button class="logoutbtn" th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/logout'">로그아웃</button>
 	    </div>
 	</div>
 	<!-- 메인 컨테이너 -->

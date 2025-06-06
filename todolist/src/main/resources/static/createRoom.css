@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* 전체 배경 그라데이션 */
 body {
-    background: linear-gradient(180deg, #F5F5DC 25%,  #D2B48C 75%);
+    background: linear-gradient(120deg, #F4EEDF 50%,  #D6C8B0 50%);
     height: 100%;
     min-height: 100vh;
     margin: 0;
@@ -51,5 +51,5 @@ body {
 }
 
 .main-container input[type="submit"]:hover {
-    background-color: darkorange;
+    background: #c97e1b;
 }

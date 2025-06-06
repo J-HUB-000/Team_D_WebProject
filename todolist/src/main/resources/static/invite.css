@@ -1,6 +1,6 @@
 @charset "UTF-8";
     body {
-        background: linear-gradient(120deg, orange 0%, yellow 100%);
+        background: linear-gradient(120deg, #F4EEDF 50%,  #D6C8B0 50%);
         min-height: 100vh;
         margin: 0;
         padding: 0;
@@ -53,13 +53,13 @@
         border: none;
         font-weight: bold;
         cursor: pointer;
-        background: linear-gradient(90deg, #ffb347, #ff9800);
+        background: orange;
         color: #fff;
         margin-left: 8px;
         transition: background 0.2s;
     }
     .friend-table button:hover {
-        background: linear-gradient(90deg, #ff9800, #ffb347);
+    background: #c97e1b;
     }
     .friend-table form {
         display: inline;

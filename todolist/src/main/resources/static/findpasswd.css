@@ -1,6 +1,6 @@
 @charset "UTF-8";
 	body {
-        background: linear-gradient(120deg, orange 0%, yellow 100%);
+    	background: linear-gradient(120deg, #F4EEDF 50%,  #D6C8B0 50%);
         height: 100%;
         min-height: 100vh;
         margin: 0;
@@ -54,7 +54,7 @@
         transition: background 0.2s;
     }
     .login-container button[type="submit"]:hover {
-        background: linear-gradient(90deg, #ff9800, #ffb347);
+        background: orange;
     }
     .login-container .extra-buttons {
         display: flex;

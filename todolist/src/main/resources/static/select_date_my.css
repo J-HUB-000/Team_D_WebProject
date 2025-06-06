@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body {
-    background: lightgrey;
+    background: #fff;
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', '맑은 고딕', Arial, sans-serif;
@@ -15,13 +15,13 @@ body {
 .add-form-top input[type="text"] {
     flex: 1;
     padding: 8px 10px;
-    border: 1px solid #ffd699;
+   	box-shadow: 0 0px 0px, 0 0px 2px;
     border-radius: 6px;
     font-size: 16px;
 }
 .add-form-top button {
-    background: linear-gradient(90deg, #ffb347, #ff9800);
-    color: #fff;
+    background: #D5CBBE;
+    color: #333333;
     border: none;
     border-radius: 6px;
     font-size: 16px;
@@ -31,13 +31,12 @@ body {
     transition: background 0.2s;
 }
 .add-form-top button:hover {
-    background: linear-gradient(90deg, #ff9800, #ffb347);
+    background: orange;
 }
 .selected-date {
-    font-size: 22px;
-    color: #ff9800;
+    font-size: 38px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-top: 30px;
     text-align: center;
 }
 .postit-board {
@@ -93,7 +92,7 @@ body {
     background: #ffcf40;
 }
 .no-todo {
-    color: black;
+    color: red;
     font-size: 17px;
     margin: 30px 0 20px 0;
     text-align: center;

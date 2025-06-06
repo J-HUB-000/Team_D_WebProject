@@ -1,6 +1,6 @@
 @charset "UTF-8";
     body {
-        background: linear-gradient(120deg, orange 0%, yellow 100%);
+        background: linear-gradient(120deg, #F4EEDF 50%,  #D6C8B0 50%);
         height: 100%;
         min-height: 100vh;
         margin: 0;
@@ -16,7 +16,7 @@
         text-align: center;
     }
     .info-container h2 {
-        color: darkorange;
+    	color: rgb(91, 50, 0);
         letter-spacing: 3px;
         margin-bottom: 28px;
     }
@@ -44,8 +44,8 @@
     .info-container button {
         width: 100%;
         padding: 12px 0;
-        background: linear-gradient(90deg, #ffb347, #ff9800);
-        color: #fff;
+        background: #D5CBBE;
+        color: #333333;
         border: none;
         border-radius: 8px;
         font-size: 18px;
@@ -55,5 +55,5 @@
         transition: background 0.2s;
     }
     .info-container button:hover {
-        background: linear-gradient(90deg, #ff9800, #ffb347);
+        background: orange;
     }
