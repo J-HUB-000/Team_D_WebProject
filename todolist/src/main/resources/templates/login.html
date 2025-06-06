@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-	    <meta charset="UTF-8">
-	    <title>로그인</title>
-	    <link rel="stylesheet" href="/login.css">
-	</head>
-	<body>
-		<div class="login-container">
-			<h1>Calinote</h1>
-			<form th:action="@{/todo/login}" method="post">
-			    <label for="email">이메일</label>
-			    <input type="email" id="email" name="email" required><br>
-			    <label for="passwd">비밀번호</label>
-			    <input type="password" id="passwd" name="passwd" required><br>
-			    <button type="submit">로그인</button>
-			</form>
-			<p th:if="${error}" th:text="${error}" style="color:red;"></p>
-			
-			<!-- 추가: 회원가입/비밀번호 찾기 버튼 -->
-			<div class="extra-buttons">
-				<button type="button" onclick="location.href='/todo/signup'">회원가입</button>
-				<button type="button" onclick="location.href='/todo/findpasswd'">비밀번호 찾기</button>
-			</div>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" href="/login.css">
+</head>
+<body>
+	<div class="login-container">
+		<h1>Calinote</h1>
+		<form th:action="@{/todo/login}" method="post">
+		    <label for="email">이메일</label>
+		    <input type="email" id="email" name="email" required><br>
+		    <label for="passwd">비밀번호</label>
+		    <input type="password" id="passwd" name="passwd" required><br>
+		    <button type="submit">로그인</button>
+		</form>
+		<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+		
+		<!-- 추가: 회원가입/비밀번호 찾기 버튼 -->
+		<div class="extra-buttons">
+			<button type="button" onclick="location.href='/todo/signup'">회원가입</button>
+			<button type="button" onclick="location.href='/todo/findpasswd'">비밀번호 찾기</button>
 		</div>
-	</body>
+	</div>
+</body>
 </html>

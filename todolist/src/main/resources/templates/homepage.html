@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-	    <meta charset="UTF-8">
-	    <title>메인 페이지</title>
-	    <link rel="stylesheet" href="/homepage.css">
-	    <link rel="stylesheet" href="/topbtn.css">
-	    <script>
-	    function requireLogin() {
-	    	alert("로그인이 필요한 서비스입니다.");
-	    }
-	    </script>
-	</head>
-	<body>
-		<!-- 상단 버튼 바 -->
-		<div class="top-btn-bar">
-		    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
-		    <div class="btn-group">
-		        <button class="loginbtn" th:if="${session.loginUser == null}"
-		                onclick="location.href='/todo/login'">로그인</button>
-		        <button th:if="${session.loginUser != null}"
-		                onclick="location.href='/todo/userinfo'">내 정보</button>
-		        <button th:if="${session.loginUser != null}"
-		                onclick="location.href='/todo/my_todo'">내 일정</button>
-		        <button th:if="${session.loginUser == null}"
-		                onclick="requireLogin()">내 일정</button>
-		        <button th:if="${session.loginUser != null}"
-		                onclick="location.href='/todo/share_room'">공유 일정</button>
-		        <button th:if="${session.loginUser == null}"
-		                onclick="requireLogin()">공유 일정</button>
-		        <button class="socialbtn" th:if="${session.loginUser != null}"
-		                onclick="location.href='/todo/social'">소셜</button>
-		        <button class="socialbtn" th:if="${session.loginUser == null}"
-		    	        onclick="requireLogin()">소셜</button>
-				<button class="logoutbtn" th:if="${session.loginUser != null}"
-		                onclick="location.href='/todo/logout'">로그아웃</button>
-		    </div>
-		</div>
-		<!-- 메인 컨테이너 -->
-		<div class="main-container">
-		    <p>당신의 일정을 계획하세요!</p>
-		</div>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="/homepage.css">
+    <link rel="stylesheet" href="/topbtn.css">
+    <script>
+    function requireLogin() {
+    	alert("로그인이 필요한 서비스입니다.");
+    }
+    </script>
+</head>
+<body>
+	<!-- 상단 버튼 바 -->
+	<div class="top-btn-bar">
+	    <a class="logo" th:href="@{/todo/homepage}">Calinote</a>
+	    <div class="btn-group">
+	        <button class="loginbtn" th:if="${session.loginUser == null}"
+	                onclick="location.href='/todo/login'">로그인</button>
+	        <button th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/userinfo'">내 정보</button>
+	        <button th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/my_todo'">내 일정</button>
+	        <button th:if="${session.loginUser == null}"
+	                onclick="requireLogin()">내 일정</button>
+	        <button th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/share_room'">공유 일정</button>
+	        <button th:if="${session.loginUser == null}"
+	                onclick="requireLogin()">공유 일정</button>
+	        <button class="socialbtn" th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/social'">소셜</button>
+	        <button class="socialbtn" th:if="${session.loginUser == null}"
+	    	        onclick="requireLogin()">소셜</button>
+			<button class="logoutbtn" th:if="${session.loginUser != null}"
+	                onclick="location.href='/todo/logout'">로그아웃</button>
+	    </div>
+	</div>
+	<!-- 메인 컨테이너 -->
+	<div class="main-container">
+	    <p>당신의 일정을 계획하세요!</p>
+	</div>
+</body>
 </html>
